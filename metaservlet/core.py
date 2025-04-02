@@ -1,0 +1,38 @@
+import subprocess
+import sys
+import json
+import csv
+from functools import reduce
+import settings.credentials as env
+
+
+def call_metaservlet(action_name: str, params: dict = {}) -> dict:
+  request = {
+    'actionName': action_name,
+    'authPass' env.TALEND_PASSWORD,
+    'authUser': env.TALEND_USER, 
+    **params
+  }
+
+  request_json_str = ison.dumps(request).replace('"',"'")
+  command=(
+    f'{env.METASERVLET_CALLER}'
+    f"-tac-url= {env.TALEND_URL}'
+    f'--json-params="{request_json_str}'
+  )
+
+  try:
+    result = subprocess. check_output (
+      command,
+      shell = True.
+      executable = '/bin/sh'
+      stderr = subprocess.STDOUT
+    )
+  except subprocess.calledProcessError as cpe:
+    result = cpe.output
+  finally:
+    response=result.splitlines()[0]
+    try:
+      return json.loads(response)
+    except:
+      return {'error': response}
