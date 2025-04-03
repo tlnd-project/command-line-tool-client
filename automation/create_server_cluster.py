@@ -80,6 +80,6 @@ def main(servers_lines: list):
       if not exist_server_in_cluster(server_id, cluster):
         add_server_to_virtual_server(server_id, cluster_id) #remote add operation
         add_server_to_cluster(server_id, cluster) #local (in memory) add operation
-        print (f'Server {server_id} added to cluster {cluster_id}')
+        print(f'Server {server_id} added to cluster {cluster_id}')
       else:
-        print (f'Server {server_id} already exist in cluster {cluster_id}')
+        print(f'Server {server_id} already exist in cluster {cluster_id}')
