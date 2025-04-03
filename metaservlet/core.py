@@ -35,7 +35,7 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
     try:
       json_result = json.loads(response)
       if 'error' in json_result:
-        raise Exception(result['error'])
+        raise Exception(json_result['error'])
       return json_result
     except:
       raise Exception(result)
