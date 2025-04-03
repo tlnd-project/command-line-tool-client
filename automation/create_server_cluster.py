@@ -59,7 +59,7 @@ def main(servers_lines: list):
       server_id = create_server(
         server_name, 
         servers_map,
-        lambda: add_server(server_name, server_host)
+        lambda: ms_add_server(server_name, server_host)
       )
     except:
       continue
