@@ -48,7 +48,7 @@ def create_server(server_name: str, servers_map: dict, add_server: Callable) -> 
 
 def main(servers_lines: list):
   servers_map = map_servers(call_metaservlet('listServer'))
-  clusters_map = map_servers(call_metaservlet('listVirtualServer'))
+  clusters_map = map_servers(call_metaservlet('listVirtualServers'))
 
   for server in servers_lines:
     print('-----', server)
