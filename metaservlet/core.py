@@ -28,8 +28,7 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
-    response=result.splitlines()[0]
-    json_result = json.loads(response)
+    return json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise Exception(json_result['error'])
   except subprocess.CalledProcessError as cpe:
