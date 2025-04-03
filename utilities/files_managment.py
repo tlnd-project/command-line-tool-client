@@ -1,4 +1,4 @@
-import pandas as po
+import pandas as pd
 import requests
 from io import StringIO
 from settings.credentials import BITBUCKET_AUTH_TOKEN
