@@ -1,9 +1,9 @@
+import csv
+import json
+import settings.credentials as env
 import subprocess
 import sys
-import json
-import csv
 from functools import reduce
-import settings.credentials as env
 
 
 def call_metaservlet(action_name: str, params: dict = {}) -> dict:
