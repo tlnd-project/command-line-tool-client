@@ -9,6 +9,7 @@ def ms_add_server(server_name: str, server_host: str) -> dict:
     'adminConsolePort': 8040,
     'commandPort': 8000,
     'filePort': 8001,
+    'monitoringPort': 8888,
     'timeoutUnknownState': '120',
     'timezoneId': 'America/New_York',
     'processMessagePort': 8555
