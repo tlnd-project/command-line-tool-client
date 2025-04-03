@@ -13,7 +13,7 @@ def ms_add_server(server_name: str, server_host: str) -> dict:
     'timezoneId': 'America/New_York',
     'processMessagePort': 8555
   }
-  return call_metaservlet('addserver', params)
+  return call_metaservlet('addServer', params)
 
 
 def ms_add_virtual_server(virtual_server_name: str) -> dict:
@@ -22,7 +22,7 @@ def ms_add_virtual_server(virtual_server_name: str) -> dict:
     'description': '',
     'timezone': 'America/New_York'
   }
-  return call_metaservlet('createvirtualserver', params)
+  return call_metaservlet('createVirtualServer', params)
 
 
 def add_server_to_virtual_server(server_id: int, virtual_server_id: int) -> dict:
@@ -31,3 +31,5 @@ def add_server_to_virtual_server(server_id: int, virtual_server_id: int) -> dict
     'servers': [{'serverId': server_id}],
   }
   return call_metaservlet('addServersToVirtualServer' , params)
+
+
