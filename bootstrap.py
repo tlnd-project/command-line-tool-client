@@ -13,4 +13,4 @@ command_function = getattr(module_service, 'main')
 data_list = load_file(batch_csv_source)
 
 #3. Run process.
-command_function(batch_csv_source)
+command_function(data_list)
