@@ -33,6 +33,9 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   finally:
     response=result.splitlines()[0]
     try:
-      return json.loads(response)
+      json_result = json.loads(response)
+      if 'error' in json_result:
+        raise Exception(result['error'])
+      return json_result
     except:
       raise Exception(result)
