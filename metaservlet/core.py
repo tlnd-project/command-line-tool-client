@@ -17,7 +17,7 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   request_json_str = json.dumps(request).replace('"',"'")
   command=(
     f'{env.METASERVLET_CALLER}'
-    f' --tac-url= {env.TALEND_URL}'
+    f' --tac-url={env.TALEND_URL}'
     f' --json-params="{request_json_str}"'
   )
 
@@ -35,4 +35,4 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
     try:
       return json.loads(response)
     except:
-      return {'error': response}
+      raise Exception(result)
