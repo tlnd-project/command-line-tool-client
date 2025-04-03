@@ -9,26 +9,26 @@ import settings.credentials as env
 def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   request = {
     'actionName': action_name,
-    'authPass' env.TALEND_PASSWORD,
+    'authPass': env.TALEND_PASSWORD,
     'authUser': env.TALEND_USER, 
     **params
   }
 
-  request_json_str = ison.dumps(request).replace('"',"'")
+  request_json_str = json.dumps(request).replace('"',"'")
   command=(
     f'{env.METASERVLET_CALLER}'
-    f"-tac-url= {env.TALEND_URL}'
+    f'-tac-url= {env.TALEND_URL}'
     f'--json-params="{request_json_str}'
   )
 
   try:
     result = subprocess. check_output (
       command,
-      shell = True.
-      executable = '/bin/sh'
+      shell = True,
+      executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
-  except subprocess.calledProcessError as cpe:
+  except subprocess.CalledProcessError as cpe:
     result = cpe.output
   finally:
     response=result.splitlines()[0]
