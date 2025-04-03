@@ -37,9 +37,9 @@ def create_server(server_name: str, servers_map: dict, add_server: Callable) -> 
       print('Server created from scratch')
       server_id = created_server['id']
       servers_map[server_name] = {'label': server_name, 'id': server_id}
-    except:
-      print('Needs manual intervention')
-      raise Exception("")
+    except Exception as e:
+      print('Needs manual intervention: ', e.args)
+      raise e
   else:
     print("Server already exist")
     server_id = servers_map[server_name]['id']
