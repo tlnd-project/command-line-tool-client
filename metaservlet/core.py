@@ -22,20 +22,15 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   )
 
   try:
-    result = subprocess. check_output (
+    result = subprocess.check_output(
       command,
       shell = True,
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
-  except subprocess.CalledProcessError as cpe:
-    result = cpe.output
-  finally:
     response=result.splitlines()[0]
-    try:
-      json_result = json.loads(response)
-      if 'error' in json_result:
-        raise Exception(json_result['error'])
-      return json_result
-    except:
-      raise Exception(result)
+    json_result = json.loads(response)
+    if 'error' in json_result:
+      raise Exception(json_result['error'])
+  except subprocess.CalledProcessError as cpe:
+    raise Exception(cpe.output)
