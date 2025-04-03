@@ -75,7 +75,7 @@ def main(servers_lines: list):
       continue
 
     #3. Add server to cluster.
-    if match_flag=='1':
+    if match_flag==1:
       cluster = clusters_map[cluster_name]
       if not exist_server_in_cluster(server_id, cluster):
         add_server_to_virtual_server(server_id, cluster_id) #remote add operation
