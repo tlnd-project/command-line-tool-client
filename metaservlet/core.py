@@ -1,15 +1,14 @@
-import csv
 import json
 import settings.credentials as env
 import subprocess
-import sys
-from functools import reduce
+import shortuuid
 
 
 def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   request_to_log = {**params}
-  print(f'Command: {action_name}')
-  print(f'Request: ', request_to_log)
+  request_id = shortuuid.uuid()
+  print(f'Command({request_id}): {action_name}')
+  print(f'Request({request_id}): ', request_to_log)
 
   request = {
     'actionName': action_name,
@@ -32,7 +31,7 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
-    print('Response: ', result.splitlines()[0])
+    print(f'Response({request_id}): ', result.splitlines()[0])
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise Exception(json_result['error'])
