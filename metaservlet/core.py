@@ -32,6 +32,7 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
       stderr = subprocess.STDOUT
     )
     print(f'Response({request_id}): ', result.splitlines()[0])
+    print('')
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise Exception(json_result['error'])
