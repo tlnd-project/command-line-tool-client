@@ -115,7 +115,7 @@ def delete_authorization(
   authorization_entity: str='Group',
 ) -> dict:
   request_params = {
-    'groupName': group_name,
+    'groupLabel': group_name,
     'projectName': project_name,
     'authorizationEntity': authorization_entity,
   }
@@ -129,7 +129,7 @@ def create_authorization(
   authorization_entity: str='Group',
 ) -> dict:
   request_params = {
-    'groupName': group_name,
+    'groupLabel': group_name,
     'projectName': project_name,
     'authorizationEntity': authorization_entity,
     'authorizationType': authorization_type,
