@@ -46,40 +46,30 @@ def create_server(server_name: str, servers_map: dict, add_server: Callable) -> 
   return server_id
 
 
-def main(servers_lines: list):
-  servers_map = map_servers(call_metaservlet('listServer'))
-  clusters_map = map_servers(call_metaservlet('listVirtualServers'))
+servers_map = map_servers(call_metaservlet('listServer'))
+clusters_map = map_servers(call_metaservlet('listVirtualServers'))
 
-  for server in servers_lines:
-    print('-----', server)
-    server_name, server_host, cluster_name, match_flag = server
 
-    #1. Create server.
-    try:
-      server_id = create_server(
-        server_name, 
-        servers_map,
-        lambda: ms_add_server(server_name, server_host)
-      )
-    except:
-      continue
-
-    #1. Create virtual server.
-    try:
-      cluster_id = create_server(
-        cluster_name,
-        clusters_map,
-        lambda: ms_add_virtual_server(cluster_name)
-      )
-    except:
-      continue
-
-    #3. Add server to cluster.
-    if match_flag==1:
-      cluster = clusters_map[cluster_name]
-      if not exist_server_in_cluster(server_id, cluster):
-        add_server_to_virtual_server(server_id, cluster_id) #remote add operation
-        add_server_to_cluster(server_id, cluster) #local (in memory) add operation
-        print(f'Server {server_id} added to cluster {cluster_id}')
-      else:
-        print(f'Server {server_id} already exist in cluster {cluster_id}')
+def process_item(server: list):
+  server_name, server_host, cluster_name, match_flag = server
+  #1. Create server.
+  server_id = create_server(
+    server_name, 
+    servers_map,
+    lambda: ms_add_server(server_name, server_host)
+  )
+  #2. Create virtual server.
+  cluster_id = create_server(
+    cluster_name,
+    clusters_map,
+    lambda: ms_add_virtual_server(cluster_name)
+  )
+  #3. Add server to cluster.
+  if match_flag==1:
+    cluster = clusters_map[cluster_name]
+    if not exist_server_in_cluster(server_id, cluster):
+      add_server_to_virtual_server(server_id, cluster_id) #remote add operation
+      add_server_to_cluster(server_id, cluster) #local (in memory) add operation
+      print(f'Server {server_id} added to cluster {cluster_id}')
+    else:
+      print(f'Server {server_id} already exist in cluster {cluster_id}')
