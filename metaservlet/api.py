@@ -12,7 +12,7 @@ def ms_add_server(server_name: str, server_host: str) -> dict:
     'monitoringPort': 8888,
     'timeoutUnknownState': '120',
     'timezoneId': 'America/New_York',
-    'processMessagePort': 8555
+    'processMessagePort': 8555,
   }
   return call_metaservlet('addServer', request_params)
 
@@ -21,7 +21,7 @@ def ms_add_virtual_server(virtual_server_name: str) -> dict:
   request_params = {
     'label': virtual_server_name,
     'description': '',
-    'timezone': 'America/New_York'
+    'timezone': 'America/New_York',
   }
   return call_metaservlet('createVirtualServer', request_params)
 
@@ -48,7 +48,7 @@ def create_project(
     git_location: str = '',
     git_login: str = '',
     git_password: str = '',
-    project_type = 'DI'
+    project_type = 'DI',
 ):
   if not project_name:
     raise Exception('Project name can not be empty.')
@@ -70,7 +70,7 @@ def create_project(
     'projectGitLocation': git_location,
     'gitLogin': git_login,
     'gitPassword': git_password,
-    'projectType': project_type
+    'projectType': project_type,
   }
   if storage=='git': 
     print(request_params)
@@ -93,7 +93,9 @@ def user_group_exist(user_group_name: str) -> int:
   return response.get("id", 0)
 
 
-def create_user_group(user_group_name: str, description: str, type:str='DQ') -> dict:
+def create_user_group(
+  user_group_name: str, description: str, type:str='DQ'
+) -> dict:
   if not user_group_name:
     raise Exception('User group name can not be empty.')
   request_params = {
@@ -105,3 +107,31 @@ def create_user_group(user_group_name: str, description: str, type:str='DQ') -> 
 def delete_user_group(user_group_id: int) -> dict:
   request_params = {'id': user_group_id}
   return call_metaservlet('deleteUserGroupById', request_params)
+
+
+def delete_authorization(
+  project_name: str, 
+  group_name: str, 
+  authorization_entity: str='Group',
+) -> dict:
+  request_params = {
+    'groupName': group_name,
+    'projectName': project_name,
+    'authorizationEntity': authorization_entity,
+  }
+  return call_metaservlet('deleteAuthorization', request_params)
+
+
+def create_authorization(
+  project_name: str,
+  group_name: str,
+  authorization_type: str,
+  authorization_entity: str='Group',
+) -> dict:
+  request_params = {
+    'groupName': group_name,
+    'projectName': project_name,
+    'authorizationEntity': authorization_entity,
+    'authorizationType': authorization_type,
+  }
+  return call_metaservlet('createAuthorization', request_params)
