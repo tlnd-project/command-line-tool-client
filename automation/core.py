@@ -10,3 +10,4 @@ def run_command(command: Callable, items: list):
     except Exception as e:
       print('ERROR', e.args)
       continue
+    print('')
