@@ -72,6 +72,9 @@ def create_project(
     'gitPassword': git_password,
     'projectType': project_type
   }
-  call_metaservlet('addServersToVirtualServer' , request_params)
+  if storage=='git': 
+    print(request_params)
+  else:
+    call_metaservlet('addServersToVirtualServer' , request_params)
 
 
