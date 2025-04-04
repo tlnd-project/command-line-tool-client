@@ -78,3 +78,8 @@ def create_project(
     call_metaservlet('createProject' , request_params)
 
 
+def delete_project(project_name: str):
+  if not project_name:
+    raise Exception('Project name can not be empty.')
+  request_params = {'projectName': project_name}
+  call_metaservlet('deleteProject', request_params)
