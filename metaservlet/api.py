@@ -163,3 +163,18 @@ def set_license_key(license_key_path: str) -> dict:
     raise Exception('License key path can not be empty.')
   request_params = {'licenseKeyPath': license_key_path}
   return call_metaservlet('setLicenseKey', request_params)
+
+
+def task_exist(task_name: str):
+  if not task_name:
+    raise Exception('Task name can not be empty')
+  request_params = {'taskName': task_name}
+  response = call_metaservlet('getTaskIdByName', request_params)
+  return response.get("id", 0)
+
+
+def update_task(task_id, context_name, value):
+  if not context_name:
+    raise Exception('Context name can not be empty')
+  request_params = {'taskId': task_id, 'context': {f'{context_name}': value}}
+  return call_metaservlet('updateTask', request_params)
