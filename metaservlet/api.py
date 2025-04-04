@@ -141,3 +141,25 @@ def create_authorization(
     'authorizationType': authorization_type,
   }
   return call_metaservlet('createAuthorization', request_params)
+
+
+def user_exists(user_name: str):
+  if not user_name:
+    raise Exception('User name can not be empty.')
+  request_params = {'userLogin': user_name}
+  response = call_metaservlet('userExist' , request_params)
+  return response['result']=='true'
+
+
+def delete_user(user_name: str) -> dict:
+  if not user_name:
+    raise Exception('User name can not be empty.')
+  request_params = {'userLogin': user_name}
+  return call_metaservlet('deleteUser', request_params)
+
+
+def set_license_key(license_key_path: str) -> dict:
+  if not license_key_path:
+    raise Exception('License key path can not be empty.')
+  request_params = {'licenseKeyPath': license_key_path}
+  return call_metaservlet('setLicenseKey', request_params)

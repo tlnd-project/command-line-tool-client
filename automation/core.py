@@ -6,8 +6,8 @@ def run_command(command: Callable, items: list):
     print('######', item)
     try:
       command(item)
-      print('SUCCESS!')
+      print('SUCCESS!\n')
     except Exception as e:
-      print('ERROR', e.args)
+      print('ERROR', e.args, '\n')
       continue
-    print('')
+    

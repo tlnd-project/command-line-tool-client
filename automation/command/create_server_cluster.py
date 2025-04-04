@@ -34,7 +34,6 @@ def create_server(server_name: str, servers_map: dict, add_server: Callable) -> 
   if not server_name in servers_map:
     try:
       created_server = add_server()
-      print('Server created from scratch')
       server_id = created_server['id']
       servers_map[server_name] = {'label': server_name, 'id': server_id}
     except Exception as e:
