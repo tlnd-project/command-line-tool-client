@@ -8,7 +8,7 @@ def main(user_groups: list):
       user_group_id = user_group_exist(user_group_name)
       if not user_group_id:
         raise Exception(f'A user group called "{user_group_name}" does not exist')
-      delete_user_group(user_group_name)
+      delete_user_group(user_group_id)
     except Exception as e:
       print('ERROR: ', e.args)
       continue
