@@ -38,7 +38,7 @@ def project_exists(project_name: str):
   if not project_name:
     raise Exception('Project name can not be empty.')
   request_params = {'projectName': project_name}
-  response = call_metaservlet('addServersToVirtualServer' , request_params)
+  response = call_metaservlet('projectExist' , request_params)
   return response['result']=='true'
 
 
@@ -75,6 +75,6 @@ def create_project(
   if storage=='git': 
     print(request_params)
   else:
-    call_metaservlet('addServersToVirtualServer' , request_params)
+    call_metaservlet('createProject' , request_params)
 
 
