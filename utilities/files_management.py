@@ -11,7 +11,6 @@ def get_csv_from_bitbucket(file_url: str, separator: str=','):
   response = requests.get(
     file_url, verify=False, allow_redirects=True, headers=headers
   )
-  print(response.text)
   return pd.read_csv(StringIO(response.text) , sep=separator, header=None, error_bad_lines=False)
 
 
