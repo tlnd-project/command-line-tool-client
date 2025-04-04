@@ -21,5 +21,5 @@ def build_file_url(file_name: str) -> str:
 def load_file(file_name: str) -> list:
   file_url = build_file_url(file_name)
   csv_dataframe = get_csv_from_bitbucket(file_url, '|')
-  csv_dataframe.fillna(None)
+  csv_dataframe.fillna(0)
   return csv_dataframe.values.tolist()
