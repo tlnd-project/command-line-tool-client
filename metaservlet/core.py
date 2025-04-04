@@ -7,6 +7,10 @@ from functools import reduce
 
 
 def call_metaservlet(action_name: str, params: dict = {}) -> dict:
+  request_to_log = {**params}
+  print(f'Command: {action_name}')
+  print(f'Request: ', request_to_log)
+
   request = {
     'actionName': action_name,
     'authPass': env.TALEND_PASSWORD,
@@ -28,8 +32,8 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
+    print('Response: ', result.splitlines()[0])
     json_result = json.loads(result.splitlines()[0])
-    print(json_result)
     if 'error' in json_result:
       raise Exception(json_result['error'])
     return json_result
