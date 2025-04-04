@@ -78,8 +78,27 @@ def create_project(
     call_metaservlet('createProject' , request_params)
 
 
-def delete_project(project_name: str):
+def delete_project(project_name: str) -> dict:
   if not project_name:
     raise Exception('Project name can not be empty.')
   request_params = {'projectName': project_name}
-  call_metaservlet('deleteProject', request_params)
+  return call_metaservlet('deleteProject', request_params)
+
+
+def user_group_exist(user_group_name: str) -> bool:
+  if not user_group_name:
+    raise Exception('User group name can not be empty.')
+  request_params = {'label':user_group_name}
+  response = call_metaservlet('getIdByUserGroupName', request_params)
+  return response["returnCode"]==0
+
+
+def create_user_group(user_group_name: str, description: str, type:str='DQ') -> dict:
+  if not user_group_name:
+    raise Exception('User group name can not be empty.')
+  request_params = {
+    'label': user_group_name,
+    'type': type,
+    'description': description,
+  }
+  return call_metaservlet('createUserGroup', request_params)
