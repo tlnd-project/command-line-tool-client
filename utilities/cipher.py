@@ -20,7 +20,7 @@ def load_key():
 
 
 def decrypt(word: str) -> str:
-  command = f'java -jar dtcc.jar {KEY_FILE_NAME} "{word}"'
+  command = f'java -jar dtcc.jar decrypt {KEY_FILE_NAME} "{word}"'
   try:
     return subprocess.check_output(
       command,
