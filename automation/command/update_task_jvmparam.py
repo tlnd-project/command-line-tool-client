@@ -10,5 +10,5 @@ def process_item(task: list):
   if not jvmTaskList["result"]:
     add_task_jvmparam(task_id, jvm_value)
   else:
-    ""
+    print(jvmTaskList)
 #  update_task(task_id, context_name, value)
