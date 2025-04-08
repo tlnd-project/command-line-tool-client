@@ -170,7 +170,7 @@ def task_exist(task_name: str):
     raise Exception('Task name can not be empty')
   request_params = {'taskName': task_name}
   response = call_metaservlet('getTaskIdByName', request_params)
-  return response.get("id", 0)
+  return response.get("taskId", 0)
 
 
 def update_task(task_id, context_name, value):
@@ -188,4 +188,9 @@ def list_task_params(task_id):
 def update_task_jvmparam(jvm_param_id, value):
   request_params = {'id': jvm_param_id, 'jvmParam': value}
   return call_metaservlet('updateTaskParam', request_params)
+
+
+def add_task_jvmparam(task_id, value):
+  request_params = {'taskId': task_id, 'jvmParam': value}
+  return call_metaservlet('addTaskParam', request_params)
 
