@@ -1,5 +1,5 @@
-from metaservlet.api import task_exist, list_task_params, add_task_jvmparam
-
+from metaservlet.api import task_exist, list_task_params, add_task_jvmparam, update_task_jvmparam
+import time
 
 def process_item(task: list):
   job_name, jvm_value = task
@@ -10,5 +10,5 @@ def process_item(task: list):
   if not jvmTaskList["result"]:
     add_task_jvmparam(task_id, jvm_value)
   else:
-    print(jvmTaskList)
-#  update_task(task_id, context_name, value)
+    update_task_jvmparam(jvmTaskList["result"][0]["id"], jvm_value)
+  time.sleep(5)
