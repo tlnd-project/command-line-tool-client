@@ -191,6 +191,6 @@ def update_task_jvmparam(jvm_param_id, value):
 
 
 def add_task_jvmparam(task_id, value):
-  request_params = {'taskId': task_id, 'jvmParam': value}
+  request_params = {'taskId': task_id, 'jvmParam': value, "active": True}
   return call_metaservlet('addTaskParam', request_params)
 
