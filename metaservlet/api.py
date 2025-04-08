@@ -180,8 +180,12 @@ def update_task(task_id, context_name, value):
   return call_metaservlet('updateTask', request_params)
 
 
-def update_task_jvmparam(task_id, context_name, value):
-  if not context_name:
-    raise Exception('Context name can not be empty')
-  request_params = {'taskId': task_id, 'context': {f'{context_name}': value}}
+def list_task_params(task_id):
+  request_params = {'taskId': task_id}
+  return call_metaservlet('listTaskParams', request_params)
+
+
+def update_task_jvmparam(jvm_param_id, value):
+  request_params = {'id': jvm_param_id, 'jvmParam': value}
   return call_metaservlet('updateTaskParam', request_params)
+
