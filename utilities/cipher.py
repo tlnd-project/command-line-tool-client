@@ -15,7 +15,7 @@ def load_key():
   response = requests.get(
     key_url, verify=False, allow_redirects=True, headers=headers
   )
-  with open('tmp-key.key') as key_file:
+  with open('tmp-key.key', 'a') as key_file:
     key_file.write(response.text)
 
 

@@ -2,7 +2,9 @@ import pandas as pd
 import requests
 import urllib3
 from io import StringIO
-from settings.credentials import BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, ENVIRONMENT_FLAG
+from settings.credentials import (
+  BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, ENVIRONMENT_FLAG
+)
 
 
 urllib3.disable_warnings()
