@@ -1,14 +1,23 @@
 from metaservlet.api import task_exist, list_task_params, add_task_jvmparam, update_task_jvmparam
-import time
 
+def find_param(tag_param: str, jvm_params_list: list) -> int:
+  for jvm_param in jvm_params_list:
+    if jvm_param.get('description', "")==tag_param:
+      return jvm_param['id']
+  return 0
+
+                 
 def process_item(task: list):
-  job_name, jvm_value = task
+  job_name, tag_param, jvm_value, is_active_flag = task
   task_id = task_exist(job_name)
+
   if not task_id:
     raise Exception(f'A task called "{task_id}" does not exist')
-  jvmTaskList = list_task_params(task_id)
-  if not jvmTaskList["result"]:
-    add_task_jvmparam(task_id, jvm_value)
+
+  jvm_params_list = list_task_params(task_id)
+  jvm_param_id = find_param(tag_param, jvm_params_list['result'])
+
+  if not jvm_param_id:
+    add_task_jvmparam(task_id, jvm_value, tag_param, is_active_flag=='true')
   else:
-    update_task_jvmparam(jvmTaskList["result"][0]["id"], jvm_value)
-  time.sleep(5)
+    update_task_jvmparam(jvm_param_id, jvm_value, is_active_flag=='true')
