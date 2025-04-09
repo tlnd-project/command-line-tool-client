@@ -185,12 +185,12 @@ def list_task_params(task_id):
   return call_metaservlet('listTaskParams', request_params)
 
 
-def update_task_jvmparam(jvm_param_id, value):
-  request_params = {'id': jvm_param_id, 'jvmParam': value}
+def update_task_jvmparam(jvm_param_id: int, value, is_active: bool):
+  request_params = {'id': jvm_param_id, 'jvmParam': value, "active": is_active}
   return call_metaservlet('updateTaskParam', request_params)
 
 
-def add_task_jvmparam(task_id, value):
-  request_params = {'taskId': task_id, 'jvmParam': value, "active": True}
+def add_task_jvmparam(task_id: int, value, is_active: bool):
+  request_params = {'taskId': task_id, 'jvmParam': value, "active": is_active}
   return call_metaservlet('addTaskParam', request_params)
 
