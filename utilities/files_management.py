@@ -15,7 +15,7 @@ def download_file(file_url: str) -> str:
     'Authorization': f'Bearer {BITBUCKET_AUTH_TOKEN}'
   }
   response = requests.get(
-    file_url, verify=False, header=None, allow_redirects=True, headers=headers
+    file_url, verify=False, allow_redirects=True, headers=headers
   )
   return response.text
 
@@ -36,4 +36,4 @@ def build_file_url(file_name: str) -> str:
 def load_file(file_name: str) -> list:
   file_url = build_file_url(file_name)
   csv_dataframe = get_csv_from_bitbucket(file_url, '|')
-  return csv_dataframe.iloc[1:].fillna('').values.tolist()
+  return csv_dataframe.iloc[1:].reset_index(drop=True).fillna('').values.tolist()
