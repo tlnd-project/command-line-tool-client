@@ -194,3 +194,7 @@ def add_task_jvmparam(task_id: int, value, is_active: bool):
   request_params = {'taskId': task_id, 'jvmParam': value, "active": is_active}
   return call_metaservlet('addTaskParam', request_params)
 
+
+def delete_jvm_param(jvm_param_id: int):
+  request_params = {'id': jvm_param_id}
+  return call_metaservlet('deleteTaskParam', request_params)

@@ -12,7 +12,7 @@ def process_item(task: list):
   task_id = task_exist(job_name)
 
   if not task_id:
-    raise Exception(f'A task called "{task_id}" does not exist')
+    raise Exception(f'A task called "{job_name}" does not exist')
 
   jvm_params_list = list_task_params(task_id)
   jvm_param_id = find_param(tag_param, jvm_params_list['result'])
