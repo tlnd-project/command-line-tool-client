@@ -37,3 +37,8 @@ def load_file(file_name: str) -> list:
   file_url = build_file_url(file_name)
   csv_dataframe = get_csv_from_bitbucket(file_url, '|')
   return csv_dataframe.iloc[1:].reset_index(drop=True).fillna('').values.tolist()
+
+
+def write_file(file_name, file_content):
+  with open(f'./{file_name}', 'w') as file:
+    file.write(file_content)
