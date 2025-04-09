@@ -7,7 +7,7 @@ def process_item(task: list):
   if not task_id:
     raise Exception(f'A task called "{task_id}" does not exist')
 
-  if is_encrypted=='True':
+  if is_encrypted=='true':
     value = decrypt(value)
 
   update_task(task_id, context_name, value)
