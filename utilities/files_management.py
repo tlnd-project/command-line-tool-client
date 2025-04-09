@@ -10,14 +10,23 @@ from settings.credentials import (
 urllib3.disable_warnings()
 
 
-def get_csv_from_bitbucket(file_url: str, separator: str=','):
+def download_file(file_url: str) -> str:
   headers = {
     'Authorization': f'Bearer {BITBUCKET_AUTH_TOKEN}'
   }
   response = requests.get(
     file_url, verify=False, allow_redirects=True, headers=headers
   )
-  return pd.read_csv(StringIO(response.text) , sep=separator, header=None, error_bad_lines=False)
+  return response.text
+
+
+def get_csv_from_bitbucket(file_url: str, separator: str=','):
+  return pd.read_csv(
+    StringIO(download_file(file_url)),
+    sep=separator,
+    header=None,
+    error_bad_lines=False
+  )
 
 
 def build_file_url(file_name: str) -> str:
