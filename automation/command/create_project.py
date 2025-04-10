@@ -6,7 +6,6 @@ def process_item(project: list):
 
   if project_exists(project_name):
     raise Exception(f'{project_name} already exist')
-
   create_project(
     project_name, storage, git_location, git_login, git_pass
   )
