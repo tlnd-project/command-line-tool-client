@@ -1,74 +1,75 @@
 from collections.abc import Callable
 from functools import reduce
 from metaservlet.core import call_metaservlet
-from metaservlet.api import (
-  ms_add_server, ms_add_virtual_server, add_server_to_virtual_server
-)
+import metaservlet.api as metaservlet
 
 
-def exist_server_in_cluster(server_id: int, cluster: dict) -> bool:
-  if not "servers" in cluster:
+class LocalServerClusterManagment():
+  servers_map: list = []
+  clusters_map: list = []
+
+  def __init__(self, servers, clusters):
+    self.servers_map = self.make_data_map(servers)
+    self.clusters_map = self.make_data_map(clusters)
+
+  def make_data_map(servers: dict) -> list:
+    return reduce(
+      lambda acc,i: {f'i["label"]': i, **acc}, servers['result'], {}
+    )
+
+  def exist_server_in_cluster(self, server_id: int, cluster_name: str) -> bool:
+    cluster = self.clusters_map[cluster_name]
+    if not "servers" in cluster: return False
+    for server in cluster['servers']:
+      if server_id==server["serverId"]: return True
     return False
 
-  for server in cluster['servers']:
-    if server_id==server["serverId"]:
-      return True
+  def add_server_to_cluster(self, server_name: int, cluster_name: str):
+    cluster = self.clusters_map[cluster_name]
+    if not 'servers' in cluster: cluster['servers'] = []
+    cluster['servers'].append(self.servers_map[server_name])
 
-  return False
+  def add_server_cluster(
+    self, item_name: str, local_data_map: dict, remote_add_item_function: Callable
+  ) -> int:
+    if not item_name in local_data_map:
+      remote_item_data = remote_add_item_function()
+      item_id = remote_item_data['id']
+      local_data_map[item_name] = {'label': item_name, 'id': item_id}
 
+    return local_data_map[item_name]['id']
 
-def add_server_to_cluster(server_id: int, cluster: dict):
-  if not 'servers' in cluster:
-    cluster['servers'] = [{'serverId': server_id}]
-  else:
-    cluster['servers'].append({'serverId': server_id})
+  def add_server(self, server_name: str, remote_add_server_function: Callable):
+    self.add_server_cluster(
+      server_name, self.servers_map, remote_add_server_function
+    )
 
-
-def map_servers(servers: dict) -> list:
-  return reduce(
-    lambda acc,i: {f'i["label"]': i, **acc}, servers['result'], {}
-  )
-
-
-def create_server(server_name: str, servers_map: dict, add_server: Callable) -> int:
-  if not server_name in servers_map:
-    try:
-      created_server = add_server()
-      server_id = created_server['id']
-      servers_map[server_name] = {'label': server_name, 'id': server_id}
-    except Exception as e:
-      print('Needs manual intervention: ', e.args)
-      raise e
-  else:
-    print("Server already exist")
-    server_id = servers_map[server_name]['id']
-  return server_id
+  def add_cluster(self, cluster_name: str, remote_add_server_function: Callable):
+    self.add_server_cluster(
+      cluster_name, self.clusters_map, remote_add_server_function
+    )
 
 
-servers_map = map_servers(call_metaservlet('listServer'))
-clusters_map = map_servers(call_metaservlet('listVirtualServers'))
+local_storage = LocalServerClusterManagment(
+  metaservlet.list_server(),
+  metaservlet.list_virtual_servers()
+)
 
 
 def process_item(server: list):
   server_name, server_host, cluster_name, match_flag = server
-  #1. Create server.
-  server_id = create_server(
-    server_name, 
-    servers_map,
-    lambda: ms_add_server(server_name, server_host)
+
+  server_id = local_storage.add_server(
+    server_name,
+    lambda: metaservlet.add_server(server_name, server_host)
   )
-  #2. Create virtual server.
-  cluster_id = create_server(
+  cluster_id = local_storage.add_cluster(
     cluster_name,
-    clusters_map,
-    lambda: ms_add_virtual_server(cluster_name)
+    lambda: metaservlet.add_virtual_server(cluster_name)
   )
-  #3. Add server to cluster.
-  if match_flag==1:
-    cluster = clusters_map[cluster_name]
-    if not exist_server_in_cluster(server_id, cluster):
-      add_server_to_virtual_server(server_id, cluster_id) #remote add operation
-      add_server_to_cluster(server_id, cluster) #local (in memory) add operation
-      print(f'Server {server_id} added to cluster {cluster_id}')
-    else:
-      print(f'Server {server_id} already exist in cluster {cluster_id}')
+  if (
+    match_flag==1 and 
+    not local_storage.exist_server_in_cluster(server_name, cluster_name)
+  ):
+    metaservlet.add_server_to_virtual_server(server_id, cluster_id)
+    local_storage.add_server_to_cluster(server_name, cluster_name)

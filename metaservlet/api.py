@@ -1,7 +1,15 @@
 from metaservlet.core import call_metaservlet
 
 
-def ms_add_server(server_name: str, server_host: str) -> dict:
+def list_server() -> dict:
+  return call_metaservlet('listServer')
+
+
+def list_virtual_servers() -> dict:
+  return call_metaservlet('listVirtualServers')
+
+
+def add_server(server_name: str, server_host: str) -> dict:
   request_params = {
     'label': server_name,
     'description': '',
@@ -17,7 +25,7 @@ def ms_add_server(server_name: str, server_host: str) -> dict:
   return call_metaservlet('addServer', request_params)
 
 
-def ms_add_virtual_server(virtual_server_name: str) -> dict:
+def add_virtual_server(virtual_server_name: str) -> dict:
   request_params = {
     'label': virtual_server_name,
     'description': '',
@@ -143,12 +151,12 @@ def create_authorization(
   return call_metaservlet('createAuthorization', request_params)
 
 
-def user_exists(user_name: str):
+def user_exists(user_name: str) -> bool:
   if not user_name:
     raise Exception('User name can not be empty.')
   request_params = {'userLogin': user_name}
   response = call_metaservlet('userExist' , request_params)
-  return response['result']=='true'
+  return response['result']
 
 
 def delete_user(user_name: str) -> dict:
