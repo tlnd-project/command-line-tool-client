@@ -1,0 +1,4 @@
+#!/bin/sh
+source venv/bin/activate
+pip -r install requirements.txt
+python bootstrap.py $1 $2

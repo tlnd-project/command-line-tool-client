@@ -1,5 +1,9 @@
 from metaservlet.api import task_exist, update_task
+from utilities.bitbucket_files_management import download_file
 from utilities.encryption import decrypt
+
+
+KEY_NAME = 'dtcc.key'
 
 
 def process_item(task: list):
@@ -9,5 +13,6 @@ def process_item(task: list):
   if not task_id:
     raise Exception(f'A task called "{job_name}" does not exist')
   if is_encrypted=='true':
-    value = decrypt(value)
+    download_file(KEY_NAME)
+    value = decrypt(value, KEY_NAME)
   update_task(task_id, context_name, value)

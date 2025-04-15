@@ -10,12 +10,12 @@ def project_exists(project_name: str):
 
 
 def create_project(
-    project_name: str,
-    storage: str = 'none',
-    git_location: str = '',
-    git_login: str = '',
-    git_password: str = '',
-    project_type = 'DI',
+  project_name: str,
+  storage: str = 'none',
+  git_location: str = '',
+  git_login: str = '',
+  git_password: str = '',
+  project_type = 'DI',
 ):
   if not project_name:
     raise Exception('Project name can not be empty.')
