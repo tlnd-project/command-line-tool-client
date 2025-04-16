@@ -1,4 +1,26 @@
 #!/bin/sh
+
+current_user=`whoami`
+if [[ $current_user != 'taladm']];
+then
+  echo -e "Command should be executed as taladm user\n"
+  exit 3
+fi
+
+if [ ! -e "./venv/bin/activate" ]; 
+then
+  echo -e "Run the setup script to install all the project dependencies and updates."
+  exit 3
+fi
+
+while getopts f:c: option;
+do
+  case "$option"
+  in
+    f)file="$OPTARG";;
+    c)tac_command="$OPTARG";;
+  esac
+done
+
 source venv/bin/activate
-pip -r install requirements.txt
-python bootstrap.py $1 $2
+python bootstrap.py $tac_command $file
