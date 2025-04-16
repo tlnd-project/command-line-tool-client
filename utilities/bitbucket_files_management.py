@@ -3,7 +3,7 @@ import requests
 import urllib3, os
 from io import StringIO
 from settings.credentials import (
-  BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, ENVIRONMENT_FLAG
+  BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, ENVIRONMENT_FLAG, WORKING_DIRECTORY
 )
 
 
@@ -25,15 +25,16 @@ def download_file_content(file_name: str) -> str:
   return response.text
 
 
-def write_file(file_name, file_content):
-  with open(f'./{file_name}', 'w') as file:
+def write_file(file_path: str, file_content: str):
+  with open(file_path, 'w') as file:
     file.write(file_content)
 
 
-def download_file(file_name: str):
-  if os.path.isfile(f'./{file_name}'):
-    return
-  write_file(download_file_content(file_name))
+def download_file(file_name: str) -> str:
+  file_path = f'{WORKING_DIRECTORY}/{file_name}'
+  if not os.path.isfile(file_path):
+    write_file(file_path, download_file_content(file_name))
+  return file_path
 
 
 def load_csv_from_bitbucket(file_name: str, separator: str=','):
