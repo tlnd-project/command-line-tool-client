@@ -1,4 +1,12 @@
 #!/bin/sh
+#-------------------------------------------------------------------------------
+# Shell Script: setup.sh
+# Description: This script is used tac-automation project and its dependencies.
+# Author: Ricardo Bermudez Bermudez
+# Usage:./setup.sh
+# Version: 0.1
+#-------------------------------------------------------------------------------
+
 current_user=`whoami`
 if [[ $current_user != 'taladm']];
 then
