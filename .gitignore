@@ -3,3 +3,4 @@ venv
 __pycache__
 dtcc.jar
 dtcc.key
+logs

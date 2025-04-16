@@ -19,6 +19,7 @@ then
   python3 -m venv venv
 fi
 
+mkdir logs
 python3 -m venv venv
 source venv/bin/activate
 pip -m pip install --upgrade pip
