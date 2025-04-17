@@ -13,7 +13,7 @@ timestamp=`date +"%Y-%m-%dT%H.%M.%S.%2N"`
 current_user=`whoami`
 tac_automation_home='/apps/TAL/Scripts/tac-automation'
 
-if [[ $current_user != 'taladm']];
+if [ $current_user != taladm ];
 then
   echo -e "Command should be executed as taladm user\n"
   exit 3

@@ -18,10 +18,10 @@ fi
 
 if [ ! -e "$tac_automation_home/venv/bin/activate" ]; 
 then
-  python3 -m venv venv
+  python3 -m venv $tac_automation_home/venv
 fi
 
-mkdir logs
+mkdir $tac_automation_home/logs
 source $tac_automation_home/venv/bin/activate
 pip install --upgrade pip
 pip install -r $tac_automation_home/requirements.txt

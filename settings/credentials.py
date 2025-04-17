@@ -12,7 +12,7 @@ CURRENT_HOST_NAME = os.environ.get('CURRENT_HOST_NAME')
 TALEND_URL = os.environ.get('TALEND_URL')
 TALEND_USER = os.environ.get('TALEND_USER')
 TALEND_PASSWORD = decrypt(
-  os.environ.get('TALEND_PASSWORD'),
+  os.environ.get('TALEND_PASSWORD_ENC'),
   f'{WORKING_DIRECTORY}/settings/dtcc_master.key',
   JAR_DECRYPTION_PATH,
 )
