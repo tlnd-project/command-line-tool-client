@@ -11,7 +11,7 @@ def run_command(command: Callable, items: list):
       if not CURRENT_HOST_NAME in item_host_restriction:
         continue
 
-    print('######', item)
+    print('######')
     try:
       command(item_content)
       print('SUCCESS!\n')

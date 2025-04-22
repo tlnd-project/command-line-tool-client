@@ -8,7 +8,7 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   request_to_log = {**params}
   request_id = shortuuid.uuid()
   print(f'Command({request_id}): {action_name}')
-  print(f'Request({request_id}): ', request_to_log)
+  #print(f'Request({request_id}): ', request_to_log)
 
   request = {
     'actionName': action_name,
