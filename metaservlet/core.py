@@ -36,6 +36,8 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise Exception(json_result['error'])
+    if json_result["returnCode"]==1:
+      raise Exception("Unknown metaservlet error")
     return json_result
   except subprocess.CalledProcessError as cpe:
     raise Exception(cpe.output)
