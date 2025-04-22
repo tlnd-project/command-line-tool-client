@@ -2,7 +2,7 @@ import json
 import settings.credentials as env
 import subprocess
 import shortuuid
-
+from metaservlet.error_codes import METASERVLET_ERROR_DICTIONARY
 
 def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   request_to_log = {**params}
@@ -36,8 +36,11 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise Exception(json_result['error'])
-    if json_result["returnCode"]==1:
-      raise Exception("Unknown metaservlet error")
+    if json_result["returnCode"] in METASERVLET_ERROR_DICTIONARY:
+      raise Exception(
+        METASERVLET_ERROR_DICTIONARY[json_result["returnCode"]],
+        json_result
+      )
     return json_result
   except subprocess.CalledProcessError as cpe:
     raise Exception(cpe.output)
