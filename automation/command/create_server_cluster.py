@@ -63,16 +63,18 @@ local_storage = LocalServerClusterManagment(
 def process_item(server: list):
   server_name, server_description, server_host, cluster_name, cluster_description, match_flag = server
 
-  server_id = local_storage.add_server(
-    server_name,
-    lambda: metaservlet.add_server(server_name, server_description, server_host)
-  )
-  cluster_id = local_storage.add_cluster(
-    cluster_name,
-    lambda: metaservlet.add_virtual_server(cluster_name, cluster_description)
-  )
+  if server_name:
+    server_id = local_storage.add_server(
+      server_name,
+      lambda: metaservlet.add_server(server_name, server_description, server_host)
+    )
+  if cluster_name:
+    cluster_id = local_storage.add_cluster(
+      cluster_name,
+      lambda: metaservlet.add_virtual_server(cluster_name, cluster_description)
+    )
   if (
-    match_flag==1 and 
+    match_flag=='1' and 
     not local_storage.exist_server_in_cluster(server_name, cluster_name)
   ):
     metaservlet.add_server_to_virtual_server(server_id, cluster_id)
