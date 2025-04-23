@@ -4,6 +4,11 @@ import subprocess
 import shortuuid
 from metaservlet.error_codes import METASERVLET_ERROR_DICTIONARY
 
+
+class MetaservletException(Exception):
+    pass
+
+
 def call_metaservlet(action_name: str, params: dict = {}) -> dict:
   request_to_log = {**params}
   request_id = shortuuid.uuid()
@@ -35,12 +40,17 @@ def call_metaservlet(action_name: str, params: dict = {}) -> dict:
     print('')
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
-      raise Exception(json_result['error'])
+      raise MetaservletException(
+        json_result['error'],
+        json_result["returnCode"],
+        json_result,
+      )
     if json_result["returnCode"] in METASERVLET_ERROR_DICTIONARY:
-      raise Exception(
+      raise MetaservletException(
         METASERVLET_ERROR_DICTIONARY[json_result["returnCode"]],
-        json_result
+        json_result["returnCode"],
+        json_result,
       )
     return json_result
   except subprocess.CalledProcessError as cpe:
-    raise Exception(cpe.output)
+    raise Exception(cpe.output, -1, {})

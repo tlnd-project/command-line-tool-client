@@ -13,8 +13,9 @@ def process_item(project: list):
   if project_exists(project_name):
     raise Exception(f'{project_name} already exist')
   
-  key_path = download_file(KEY_NAME)
-  git_pass = decrypt(git_pass, key_path, JAR_DECRYPTION_PATH)
+  if storage=='git':
+    key_path = download_file(KEY_NAME)
+    git_pass = decrypt(git_pass, key_path, JAR_DECRYPTION_PATH)
   
   create_project(
     project_name, storage, git_location, git_login, git_pass

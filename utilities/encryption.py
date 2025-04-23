@@ -8,11 +8,13 @@ def decrypt(word: str, key_path: str, jar_path: str) -> str:
   
   command = f'java -jar {jar_path} decrypt {key_path} "{word}"'
   try:
-    return subprocess.check_output(
+    output = subprocess.check_output(
       command,
       shell = True,
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     ).decode('utf8').strip()
+    if 'error' in output.lower() or 'exception' in output.lower():
+      raise Exception(output)
   except subprocess.CalledProcessError as cpe:
     raise Exception(cpe.output)

@@ -1,3 +1,5 @@
+INVALID_PARAMETER_CODE = 5
+
 METASERVLET_ERROR_DICTIONARY = {
   1: "Unknown Error",
   2: "Invalid request",

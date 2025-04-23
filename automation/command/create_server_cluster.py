@@ -12,9 +12,9 @@ class LocalServerClusterManagment():
     self.servers_map = self.make_data_map(servers)
     self.clusters_map = self.make_data_map(clusters)
 
-  def make_data_map(servers: dict) -> list:
+  def make_data_map(self, servers: dict) -> list:
     return reduce(
-      lambda acc,i: {f'i["label"]': i, **acc}, servers['result'], {}
+      lambda acc,i: {i["label"]: i, **acc}, servers['result'], {}
     )
 
   def exist_server_in_cluster(self, server_id: int, cluster_name: str) -> bool:
@@ -39,13 +39,17 @@ class LocalServerClusterManagment():
 
     return local_data_map[item_name]['id']
 
-  def add_server(self, server_name: str, remote_add_server_function: Callable):
-    self.add_server_cluster(
+  def add_server(
+    self, server_name: str, remote_add_server_function: Callable
+  ) -> int:
+    return self.add_server_cluster(
       server_name, self.servers_map, remote_add_server_function
     )
 
-  def add_cluster(self, cluster_name: str, remote_add_server_function: Callable):
-    self.add_server_cluster(
+  def add_cluster(
+    self, cluster_name: str, remote_add_server_function: Callable
+  ) -> int:
+    return self.add_server_cluster(
       cluster_name, self.clusters_map, remote_add_server_function
     )
 
@@ -57,15 +61,15 @@ local_storage = LocalServerClusterManagment(
 
 
 def process_item(server: list):
-  server_name, server_host, cluster_name, match_flag = server
+  server_name, server_description, server_host, cluster_name, cluster_description, match_flag = server
 
   server_id = local_storage.add_server(
     server_name,
-    lambda: metaservlet.add_server(server_name, server_host)
+    lambda: metaservlet.add_server(server_name, server_description, server_host)
   )
   cluster_id = local_storage.add_cluster(
     cluster_name,
-    lambda: metaservlet.add_virtual_server(cluster_name)
+    lambda: metaservlet.add_virtual_server(cluster_name, cluster_description)
   )
   if (
     match_flag==1 and 
