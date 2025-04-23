@@ -16,5 +16,6 @@ def decrypt(word: str, key_path: str, jar_path: str) -> str:
     ).decode('utf8').strip()
     if 'error' in output.lower() or 'exception' in output.lower():
       raise Exception(output)
+    return output
   except subprocess.CalledProcessError as cpe:
     raise Exception(cpe.output)
