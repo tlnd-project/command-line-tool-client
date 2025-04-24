@@ -55,3 +55,8 @@ def delete_user_group(user_group_id: int) -> dict:
 def add_user_to_user_group(user_id: int, user_group_id: int) -> dict:
   request_params = {'id': user_group_id, 'users': [{'id': user_id}]}
   return call_metaservlet('addUsersToUserGroup', request_params)
+
+
+def remove_user_from_user_group(user_id: int, user_group_id: int) -> dict:
+  request_params = {'id': user_group_id, 'users': [{'id': user_id}]}
+  return call_metaservlet('removeUsersFromUserGroup', request_params)

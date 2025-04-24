@@ -49,3 +49,12 @@ def create_project_server_authorization(project_name: str, cluster_name: str) ->
     'serverName': cluster_name,
   }
   return call_metaservlet('createServerProjectAuthorization' , request_params)
+
+
+def remove_project_server_authorization(project_name: str, cluster_name: str) -> dict:
+  request_params = {
+    'isVirtualServer': True,
+    'projectName': project_name,
+    'serverName': cluster_name,
+  }
+  return call_metaservlet('removeServerProjectAuthorization' , request_params)
