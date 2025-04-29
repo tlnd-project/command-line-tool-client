@@ -4,3 +4,4 @@ __pycache__
 dtcc.jar
 dtcc.key
 logs
+.DS_Store
