@@ -1,20 +1,19 @@
 from collections.abc import Callable
 from functools import reduce
-from metaservlet.core import call_metaservlet
 import metaservlet.api as metaservlet
 
 
-class LocalServerClusterManagment():
-  servers_map: list = []
-  clusters_map: list = []
+class LocalServerClusterManagment:
+  servers_map: dict = {}
+  clusters_map: dict = {}
 
   def __init__(self, servers, clusters):
     self.servers_map = self.make_data_map(servers)
     self.clusters_map = self.make_data_map(clusters)
 
-  def make_data_map(self, servers: dict) -> list:
+  def make_data_map(self, servers: dict) -> dict:
     return reduce(
-      lambda acc,i: {i["label"]: i, **acc}, servers['result'], {}
+      lambda acc, i: {i["label"]: i, **acc}, servers['result'], {}
     )
 
   def exist_server_in_cluster(self, server_id: int, cluster_name: str) -> bool:
@@ -59,7 +58,7 @@ local_storage = LocalServerClusterManagment(
   metaservlet.list_virtual_servers()
 )
 
-
+# TODO: change server:list for positional variables.
 def process_item(server: list):
   server_name, server_description, server_host, cluster_name, cluster_description, match_flag = server
 
@@ -77,5 +76,6 @@ def process_item(server: list):
     match_flag=='1' and 
     not local_storage.exist_server_in_cluster(server_name, cluster_name)
   ):
+    # TODO: whats is the server_id and cluster_id default values. these variables is set inside the block if.
     metaservlet.add_server_to_virtual_server(server_id, cluster_id)
     local_storage.add_server_to_cluster(server_name, cluster_name)

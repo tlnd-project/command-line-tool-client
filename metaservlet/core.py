@@ -1,7 +1,9 @@
 import json
-import settings.credentials as env
 import subprocess
 import shortuuid
+import settings.credentials as env
+from typing import Any, Dict, Optional
+
 from metaservlet.error_codes import METASERVLET_ERROR_DICTIONARY
 
 
@@ -9,8 +11,8 @@ class MetaservletException(Exception):
     pass
 
 
-def call_metaservlet(action_name: str, params: dict = {}) -> dict:
-  request_to_log = {**params}
+def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) -> dict:
+  request_to_log = {**params} if params else {}
   request_id = shortuuid.uuid()
   print(f'Command({request_id}): {action_name}')
   #print(f'Request({request_id}): ', request_to_log)
