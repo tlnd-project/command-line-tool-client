@@ -34,15 +34,16 @@ def user_group_exist(user_group_name: str) -> int:
   except MetaservletException as e:
     if e.args[1]==INVALID_PARAMETER_CODE:
       return 0
+  # TODO: what is the default value returned?
 
 
 def create_user_group(
-  user_group_name: str, description: str, type:str='DQ'
+  user_group_name: str, description: str, ttype: str='DQ'
 ) -> dict:
   if not user_group_name:
     raise Exception('User group name can not be empty.')
   request_params = {
-    'label': user_group_name, 'type': type, 'description': description,
+    'label': user_group_name, 'type': ttype, 'description': description,
   }
   return call_metaservlet('createUserGroup', request_params)
 
