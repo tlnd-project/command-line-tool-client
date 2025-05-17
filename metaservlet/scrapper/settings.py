@@ -1,7 +1,7 @@
 import ast
 
 from metaservlet.core import tac_client
-from get_function_token import get_function_tokens
+from .get_function_token import get_function_tokens
 from settings.credentials import TALEND_USER, TALEND_PASSWORD
 
 TAC_PERMUTATION = "17B18BA3641F02EA98896D1400E44444"
@@ -88,15 +88,13 @@ def settings_update_field(field, value):
     verify=False,
     allow_redirects=True,
   )
-  print(response_2.request.headers)
-  print(response_2.headers)
-  print(response_2.text)
-  xsrf = ast.literal_eval(response_2.text.replace("//OK", "'"))
+  print(response_2)
+  xsrf = ast.literal_eval(response_2.text.replace("//OK", ""))
 
   # 2) update field
 
   request_3_data = (
-    '17|2|9|https://satacd0001:8443/org.talend.administrator/administrator/'
+    '7|2|9|https://satacd0001:8443/org.talend.administrator/administrator/'
     f"|{function_tokens['org.talend.gwtadministrator.client.module.settings.configuration.service.ConfigService']}"
     f"|{xsrf[2][0]}|{xsrf[2][1]}"
     '|org.talend.gwtadministrator.client.module.settings.configuration.service.ConfigService'
@@ -105,16 +103,14 @@ def settings_update_field(field, value):
   ).encode('utf-8')
 
   response_3 = tac_client.post(
-    'https://satacd0001:8443/org.talend.administrator/administrator/config',
+    'administrator/config',
     headers=headers,
     data=request_3_data,
     verify=False,
     allow_redirects=True,
   )
 
-  print(response_3.request.headers)
-  print(response_3.headers)
-  print(response_3.text)
+  print(response_3)
 
   # 3) logout
 
@@ -134,6 +130,4 @@ def settings_update_field(field, value):
     allow_redirects=True,
   )
 
-  print(response_4.request.headers)
-  print(response_4.headers)
-  print(response_4.text)
+  print(response_4)
