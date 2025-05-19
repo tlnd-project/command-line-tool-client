@@ -3,7 +3,7 @@ import requests
 import urllib3, os
 from io import StringIO
 from settings.credentials import (
-  BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, ENVIRONMENT_FLAG, WORKING_DIRECTORY
+  BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, BITBUCKET_REPO_BRANCH, ENVIRONMENT_FLAG, WORKING_DIRECTORY
 )
 
 
@@ -11,7 +11,7 @@ urllib3.disable_warnings()
 
 
 def build_file_url(file_name: str) -> str:
-  return BITBUCKET_REPO_URL.format(f'{ENVIRONMENT_FLAG}/{file_name}')
+  return BITBUCKET_REPO_URL.format(f'{ENVIRONMENT_FLAG}/{file_name}') + BITBUCKET_REPO_BRANCH
 
 
 def download_file_content(file_name: str) -> str:
