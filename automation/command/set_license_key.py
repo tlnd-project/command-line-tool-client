@@ -1,6 +1,7 @@
+import os
+
 from metaservlet.api import set_license_key
 from utilities.bitbucket_files_management import download_file
-import os
 
 
 def process_item(new_license: list):

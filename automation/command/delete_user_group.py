@@ -1,4 +1,4 @@
-from metaservlet.api import user_group_exist, delete_user_group
+from metaservlet.api import delete_user_group, user_group_exist
 
 
 def process_item(user_group: list):

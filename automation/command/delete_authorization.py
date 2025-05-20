@@ -1,6 +1,4 @@
-from metaservlet.api import (
-  user_group_exist, project_exists, delete_authorization
-)
+from metaservlet.api import delete_authorization, project_exists, user_group_exist
 
 
 def process_item(authorization: list):

@@ -1,4 +1,5 @@
 from collections.abc import Callable
+
 from settings.credentials import CURRENT_HOST_NAME
 
 
@@ -8,7 +9,7 @@ def run_command(command: Callable, items: list):
 
     if not item_host_restriction == "":
       item_host_restriction = item_host_restriction.split(';')
-      if not CURRENT_HOST_NAME in item_host_restriction:
+      if not (CURRENT_HOST_NAME in item_host_restriction):
         continue
 
     print('######')

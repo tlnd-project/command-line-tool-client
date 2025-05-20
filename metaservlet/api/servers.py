@@ -25,7 +25,10 @@ def add_server(server_name: str, server_description: str, server_host: str) -> d
   return call_metaservlet('addServer', request_params)
 
 
-def add_virtual_server(virtual_server_name: str,  virtual_server_description: str,) -> dict:
+def add_virtual_server(
+    virtual_server_name: str,
+    virtual_server_description: str
+) -> dict:
   request_params = {
     'label': virtual_server_name,
     'description': virtual_server_description,
@@ -39,7 +42,7 @@ def add_server_to_virtual_server(server_id: int, virtual_server_id: int) -> dict
     'virtualServerId': virtual_server_id,
     'servers': [{'serverId': server_id}],
   }
-  return call_metaservlet('addServersToVirtualServer' , request_params)
+  return call_metaservlet('addServersToVirtualServer', request_params)
 
 
 def create_project_server_authorization(project_name: str, cluster_name: str) -> dict:
@@ -48,7 +51,7 @@ def create_project_server_authorization(project_name: str, cluster_name: str) ->
     'projectName': project_name,
     'serverName': cluster_name,
   }
-  return call_metaservlet('createServerProjectAuthorization' , request_params)
+  return call_metaservlet('createServerProjectAuthorization', request_params)
 
 
 def remove_project_server_authorization(project_name: str, cluster_name: str) -> dict:
@@ -57,4 +60,4 @@ def remove_project_server_authorization(project_name: str, cluster_name: str) ->
     'projectName': project_name,
     'serverName': cluster_name,
   }
-  return call_metaservlet('removeServerProjectAuthorization' , request_params)
+  return call_metaservlet('removeServerProjectAuthorization', request_params)

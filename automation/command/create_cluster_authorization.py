@@ -1,4 +1,4 @@
-from metaservlet.api import project_exists, create_project_server_authorization
+from metaservlet.api import create_project_server_authorization, project_exists
 
 
 def process_item(authorization: list):

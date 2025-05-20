@@ -1,17 +1,26 @@
+import os
+from io import StringIO
+
 import pandas as pd
 import requests
-import urllib3, os
-from io import StringIO
-from settings.credentials import (
-  BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, BITBUCKET_REPO_BRANCH, ENVIRONMENT_FLAG, WORKING_DIRECTORY
-)
+import urllib3
 
+from settings.credentials import (
+    BITBUCKET_AUTH_TOKEN,
+    BITBUCKET_REPO_BRANCH,
+    BITBUCKET_REPO_URL,
+    ENVIRONMENT_FLAG,
+    WORKING_DIRECTORY,
+)
 
 urllib3.disable_warnings()
 
 
 def build_file_url(file_name: str) -> str:
-  return BITBUCKET_REPO_URL.format(f'{ENVIRONMENT_FLAG}/{file_name}') + BITBUCKET_REPO_BRANCH
+  return (
+      BITBUCKET_REPO_URL.format(f'{ENVIRONMENT_FLAG}/{file_name}')
+      + BITBUCKET_REPO_BRANCH
+  )
 
 
 def download_file_content(file_name: str) -> str:
@@ -37,7 +46,7 @@ def download_file(file_name: str) -> str:
   return file_path
 
 
-def load_csv_from_bitbucket(file_name: str, separator: str=','):
+def load_csv_from_bitbucket(file_name: str, separator: str = ','):
   return pd.read_csv(
     StringIO(download_file_content(file_name)),
     sep=separator,
@@ -49,4 +58,3 @@ def load_csv_from_bitbucket(file_name: str, separator: str=','):
 def list_csv_file_rows(file_name: str) -> list:
   csv_dataframe = load_csv_from_bitbucket(file_name, '|')
   return csv_dataframe.iloc[1:].reset_index(drop=True).fillna('').values.tolist()
-

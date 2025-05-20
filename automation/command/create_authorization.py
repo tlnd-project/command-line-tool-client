@@ -1,5 +1,5 @@
 from automation.command.delete_authorization import (
-  process_item as revoke_authorization_command
+    process_item as revoke_authorization_command,
 )
 from metaservlet.api import create_authorization
 

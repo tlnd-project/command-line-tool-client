@@ -1,5 +1,6 @@
 from collections.abc import Callable
 from functools import reduce
+
 import metaservlet.api as metaservlet
 
 
@@ -18,20 +19,23 @@ class LocalServerClusterManagment:
 
   def exist_server_in_cluster(self, server_id: int, cluster_name: str) -> bool:
     cluster = self.clusters_map[cluster_name]
-    if not "servers" in cluster: return False
+    if not ("servers" in cluster):
+      return False
     for server in cluster['servers']:
-      if server_id==server["serverId"]: return True
+      if server_id == server["serverId"]:
+        return True
     return False
 
   def add_server_to_cluster(self, server_name: int, cluster_name: str):
     cluster = self.clusters_map[cluster_name]
-    if not 'servers' in cluster: cluster['servers'] = []
+    if not ('servers' in cluster):
+      cluster['servers'] = []
     cluster['servers'].append(self.servers_map[server_name])
 
   def add_server_cluster(
     self, item_name: str, local_data_map: dict, remote_add_item_function: Callable
   ) -> int:
-    if not item_name in local_data_map:
+    if not (item_name in local_data_map):
       remote_item_data = remote_add_item_function()
       item_id = remote_item_data['id']
       local_data_map[item_name] = {'label': item_name, 'id': item_id}
@@ -58,6 +62,7 @@ local_storage = LocalServerClusterManagment(
   metaservlet.list_virtual_servers()
 )
 
+
 # TODO: change server:list for positional variables.
 def process_item(server: list):
   server_name, server_description, server_host, cluster_name, cluster_description, match_flag = server
@@ -73,9 +78,11 @@ def process_item(server: list):
       lambda: metaservlet.add_virtual_server(cluster_name, cluster_description)
     )
   if (
-    match_flag=='1' and 
-    not local_storage.exist_server_in_cluster(server_name, cluster_name)
+      match_flag == '1'
+      and not local_storage.exist_server_in_cluster(server_name, cluster_name)
   ):
-    # TODO: whats is the server_id and cluster_id default values. these variables is set inside the block if.
+    #
+    # TODO: whats is the server_id and cluster_id default values.
+    #  these variables is set inside the block if.
     metaservlet.add_server_to_virtual_server(server_id, cluster_id)
     local_storage.add_server_to_cluster(server_name, cluster_name)

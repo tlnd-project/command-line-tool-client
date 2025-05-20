@@ -2,9 +2,9 @@ from metaservlet.core import call_metaservlet
 
 
 def delete_authorization(
-  project_name: str, 
-  group_name: str, 
-  authorization_entity: str='Group',
+  project_name: str,
+  group_name: str,
+  authorization_entity: str = 'Group',
 ) -> dict:
   request_params = {
     'groupLabel': group_name,
@@ -18,13 +18,13 @@ def create_authorization(
   project_name: str,
   user_group_name: str,
   authorization_type: str,
-  authorization_entity: str='Group',
+  authorization_entity: str = 'Group',
 ) -> dict:
   if not project_name:
     raise Exception('Project name can not be empty.')
   if not user_group_name:
     raise Exception('User group name can not be empty.')
-  if not authorization_type in ['ReadOnly', 'ReadWrite']:
+  if not (authorization_type in ['ReadOnly', 'ReadWrite']):
     raise Exception('<storage> invalid value.')
   request_params = {
     'groupLabel': user_group_name,

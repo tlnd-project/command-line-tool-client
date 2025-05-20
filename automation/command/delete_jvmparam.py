@@ -1,7 +1,7 @@
-from metaservlet.api import task_exist, list_task_params, delete_jvm_param
 from automation.command.update_task_jvmparam import find_param
+from metaservlet.api import delete_jvm_param, list_task_params, task_exist
 
-                 
+
 def process_item(jvm_param: list):
   job_name, tag_param = jvm_param
 
@@ -13,5 +13,5 @@ def process_item(jvm_param: list):
   jvm_param_id = find_param(tag_param, jvm_params_list['result'])
   if not jvm_param_id:
     raise Exception(f'A "{job_name}" task have no param called {tag_param}')
-  
+
   delete_jvm_param(jvm_param_id)

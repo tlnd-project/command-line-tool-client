@@ -1,5 +1,8 @@
 from metaservlet.api import (
-  add_user_to_user_group, get_user_info, user_group_exist, user_exists,
+    add_user_to_user_group,
+    get_user_info,
+    user_exists,
+    user_group_exist,
 )
 
 
@@ -11,4 +14,4 @@ def process_item(item: list):
   if not user_exists(user_name):
     raise Exception(f'A user called {user_name} does not exist')
   user_id = get_user_info(user_name).get('userId')
-  add_user_to_user_group(user_id,user_group_id)
+  add_user_to_user_group(user_id, user_group_id)
