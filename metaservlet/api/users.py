@@ -38,12 +38,12 @@ def user_group_exist(user_group_name: str) -> int:
 
 
 def create_user_group(
-  user_group_name: str, description: str, ttype: str='DQ'
+  user_group_name: str, description: str, user_group_type: str='DQ'
 ) -> dict:
   if not user_group_name:
     raise Exception('User group name can not be empty.')
   request_params = {
-    'label': user_group_name, 'type': ttype, 'description': description,
+    'label': user_group_name, 'type': user_group_type, 'description': description,
   }
   return call_metaservlet('createUserGroup', request_params)
 
