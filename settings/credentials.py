@@ -1,4 +1,5 @@
 import os
+import socket
 from dotenv import load_dotenv, find_dotenv 
 from utilities.encryption import decrypt
 
@@ -6,9 +7,9 @@ from utilities.encryption import decrypt
 load_dotenv(find_dotenv())
 
 
-WORKING_DIRECTORY = os.environ.get('WORKING_DIRECTORY')
+WORKING_DIRECTORY = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 JAR_DECRYPTION_PATH = f'{WORKING_DIRECTORY}/dtcc.jar'
-CURRENT_HOST_NAME = os.environ.get('CURRENT_HOST_NAME')
+CURRENT_HOST_NAME = socket.gethostname()
 TALEND_URL = os.environ.get('TALEND_URL')
 TALEND_USER = os.environ.get('TALEND_USER')
 if os.environ.get("IS_PASSWORD_ENCRYPTED")==1:
