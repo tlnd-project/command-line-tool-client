@@ -13,7 +13,7 @@ CURRENT_HOST_NAME = socket.gethostname()
 TALEND_URL = os.environ.get('TALEND_URL')
 TALEND_USER = os.environ.get('TALEND_USER')
 if os.environ.get("IS_PASSWORD_ENCRYPTED")==1:
-  TALEND_PASSWORD = decrypt( # pragma : allowlist secret - false positive
+  TALEND_PASSWORD = decrypt( # pragma: allowlist secret - false positive
     os.environ.get('TALEND_PASSWORD'),
     f'{WORKING_DIRECTORY}/settings/dtcc_master.key',
     JAR_DECRYPTION_PATH,
