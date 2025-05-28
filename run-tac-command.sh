@@ -36,5 +36,5 @@ done
 
 log_path="$tac_automation_home/logs/$tac_command.$timestamp.log"
 source $tac_automation_home/venv/bin/activate
-python $tac_automation_home/bootstrap.py $tac_command $file | tee $log_path
-echo "Execution logs are available in $log_path"
+python $tac_automation_home/bootstrap.py $tac_command $file
+exit $?
