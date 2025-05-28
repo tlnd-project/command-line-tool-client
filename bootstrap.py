@@ -13,5 +13,7 @@ command_function = getattr(module_service, 'process_item')
 #2. Load remote CSV.
 data_list = list_csv_file_rows(batch_csv_source)
 
+# TODO: add verification WARNING. if the "sso" in TAC_URL, maybe crashed the run command
+
 #3. Run process.
 run_command(command_function, data_list)
