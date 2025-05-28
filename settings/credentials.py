@@ -12,7 +12,7 @@ JAR_DECRYPTION_PATH = f'{WORKING_DIRECTORY}/dtcc.jar'
 CURRENT_HOST_NAME = socket.gethostname()
 TALEND_URL = os.environ.get('TALEND_URL')
 TALEND_USER = os.environ.get('TALEND_USER')
-if os.environ.get("IS_PASSWORD_ENCRYPTED")==1:
+if os.environ.get("IS_PASSWORD_ENCRYPTED")=="1":
   TALEND_PASSWORD = decrypt( # pragma: allowlist secret - false positive
     os.environ.get('TALEND_PASSWORD'),
     f'{WORKING_DIRECTORY}/settings/dtcc_master.key',
@@ -25,8 +25,14 @@ BITBUCKET_AUTH_TOKEN = os.environ.get('BITBUCKET_AUTH_TOKEN')
 BITBUCKET_REPO_BRANCH = os.environ.get('BITBUCKET_REPO_BRANCH')
 BITBUCKET_REPO_URL = os.environ.get('BITBUCKET_REPO_URL')
 ENVIRONMENT_FLAG = os.environ.get('ENVIRONMENT_FLAG')
-
 TALEND_SCRAPPER_SSO_FLAG = os.environ.get('TALEND_SCRAPPER_SSO_FLAG')
 TALEND_SCRAPPER_URL = os.environ.get('TALEND_SCRAPPER_URL')
 TALEND_SCRAPPER_USER = os.environ.get('TALEND_SCRAPPER_USER')
-TALEND_SCRAPPER_PASSWORD = os.environ.get('TALEND_SCRAPPER_PASSWORD')
+if os.environ.get("IS_TALEND_SCRAPPER_PASSWORD_ENCRYPTED")=="1":
+  TALEND_SCRAPPER_PASSWORD = decrypt( # pragma: allowlist secret - false positive
+    os.environ.get('TALEND_SCRAPPER_PASSWORD'),
+    f'{WORKING_DIRECTORY}/settings/sso_talend.key',
+    JAR_DECRYPTION_PATH,
+  )
+else:
+  TALEND_SCRAPPER_PASSWORD = os.environ.get('TALEND_SCRAPPER_PASSWORD')
