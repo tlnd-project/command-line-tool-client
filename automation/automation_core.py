@@ -1,6 +1,10 @@
 import sys
 from collections.abc import Callable
 from settings.credentials import CURRENT_HOST_NAME
+from settings.logger_config import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def run_command(command: Callable, items: list):
@@ -13,13 +17,13 @@ def run_command(command: Callable, items: list):
       if not CURRENT_HOST_NAME in item_host_restriction:
         continue
 
-    print('######')
     try:
       command(item_content)
-      print('SUCCESS!\n')
+      logger.info(f'Command {command.__name__} executed successfully')
     except Exception as e:
       list_errors.append(type(e).__name__)
-      print('ERROR', e.args, '\n')
+      logger.info(f"Values with exception: {item}")
+      logger.exception("an unexpected error occurred")
       continue
 
   if len(list_errors) > 0:
