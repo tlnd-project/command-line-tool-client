@@ -1,6 +1,6 @@
 import os
 import socket
-from dotenv import load_dotenv, find_dotenv 
+from dotenv import load_dotenv, find_dotenv
 from utilities.encryption import decrypt
 
 
@@ -36,3 +36,6 @@ if os.environ.get("IS_TALEND_SCRAPPER_PASSWORD_ENCRYPTED")=="1":
   )
 else:
   TALEND_SCRAPPER_PASSWORD = os.environ.get('TALEND_SCRAPPER_PASSWORD')
+
+LOG_LEVEL = os.environ.get('LOG_LEVEL', "INFO")
+LOG_NAME = os.environ.get('LOG_NAME', "command.log")
