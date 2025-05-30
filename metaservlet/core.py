@@ -13,7 +13,10 @@ from urllib3.util.retry import Retry
 import settings.credentials as env
 from metaservlet.scrapper.get_function_token import get_function_tokens
 from metaservlet.error_codes import METASERVLET_ERROR_DICTIONARY
+from settings.logger_config import logging
 
+
+logger = logging.getLogger(__name__)
 
 function_tokens = get_function_tokens()
 
@@ -25,8 +28,7 @@ class MetaservletException(Exception):
 def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) -> dict:
   request_to_log = {**params} if params else {}
   request_id = shortuuid.uuid()
-  print(f'Command({request_id}): {action_name}')
-  #print(f'Request({request_id}): ', request_to_log)
+  logger.info(f'Command({request_id}): {action_name}')
 
   request = {
     'actionName': action_name,
