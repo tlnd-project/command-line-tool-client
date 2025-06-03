@@ -1,6 +1,6 @@
 import os
 import socket
-from dotenv import load_dotenv, find_dotenv 
+from dotenv import load_dotenv, find_dotenv
 from utilities.encryption import decrypt
 
 
@@ -38,3 +38,5 @@ else:
   TALEND_SCRAPPER_PASSWORD = os.environ.get('TALEND_SCRAPPER_PASSWORD')
 
 MANIFEST_PATH = os.environ.get('MANIFEST_PATH')
+LOG_LEVEL = os.environ.get('LOG_LEVEL', "INFO")
+LOG_NAME = os.environ.get('LOG_NAME', "command.log")

@@ -13,7 +13,10 @@ from urllib3.util.retry import Retry
 import settings.credentials as env
 from metaservlet.scrapper.get_function_token import get_function_tokens
 from metaservlet.error_codes import METASERVLET_ERROR_DICTIONARY
+from settings.logger_config import logging
 
+
+logger = logging.getLogger(__name__)
 
 function_tokens = get_function_tokens()
 
@@ -25,8 +28,7 @@ class MetaservletException(Exception):
 def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) -> dict:
   request_to_log = {**params} if params else {}
   request_id = shortuuid.uuid()
-  print(f'Command({request_id}): {action_name}')
-  #print(f'Request({request_id}): ', request_to_log)
+  logger.info(f'Command({request_id}): {action_name}')
 
   request = {
     'actionName': action_name,
@@ -49,8 +51,7 @@ def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) 
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
-    print(f'Response({request_id}): ', result.splitlines()[0])
-    print('')
+    logger.info(f'Response({request_id}): {result.splitlines()[0]}')
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise MetaservletException(
@@ -116,14 +117,14 @@ class TACHttpClient:
   def _handle_response(response):
     if 200 <= response.status_code < 300:
       # TODO: parse response.text //OK
-      print("[Response]: ", response.status_code)
+      logger.info(f"[Response]: {response.status_code}")
       try:
-        print(response.text)
+        logger.info(response.text)
       except AttributeError as e:
-        print("Not found <response.text>")
+        logger.exception("Not found <response.text>")
       return response
     else:
-      print(f"HTTP {response.status_code}: {response.text}")
+      logger.info(f"HTTP {response.status_code}: {response.text}")
       return None
 
   def _build_gwt_rpc_body(
@@ -158,7 +159,7 @@ class TACHttpClient:
       response = self.session.get(url, params=params, headers=headers, timeout=self.timeout)
       return self._handle_response(response)
     except requests.RequestException as e:
-      print(f"[GET] Error: {e}")
+      logger.exception(f"[GET] Error: {e}")
       return None
 
   def post(self, endpoint=None, full_url=None, data=None, headers=None, **kwargs):
@@ -168,14 +169,14 @@ class TACHttpClient:
     :param full_url: all url. is mutually exclusive with endpoint
     :type full_url: str
     """
-    print("<=== Request POST ===>")
-    print("[Body]", data)
-    print("[Headers Param]", headers)
-    print("[Headers session]", self.session.headers)
-    print("[URL]", full_url or self._build_url(endpoint))
-    print("[Cookies] ", self.session.cookies)
+    logger.info("<=== Request POST ===>")
+    logger.info(f"[Body] {data}")
+    logger.info(f"[Headers Param] {headers}")
+    logger.info(f"[Headers session] {self.session.headers}")
+    logger.info(f"[URL] {full_url or self._build_url(endpoint)}")
+    logger.info(f"[Cookies] {self.session.cookies}")
     for cookie in self.session.cookies:
-      print("\t name: ", cookie.name, " value: ", cookie.value, " domain: ", cookie.domain, " path: ", cookie.path )
+      logger.info(f"\t name: {cookie.name}, value: {cookie.value}, domain: {cookie.domain}, path: {cookie.path}")
     try:
       response = self.session.post(
         full_url or self._build_url(endpoint),
@@ -186,11 +187,11 @@ class TACHttpClient:
       )
       return self._handle_response(response)
     except requests.RequestException as e:
-      print(f"[POST] Error: {e}")
+      logger.exception(f"[POST] Error:")
       return None
 
   def login(self, username, password):
-    print("Getting login ...")
+    logger.info("Getting login ...")
     manifest_token = function_tokens[
       'org.talend.gwttoolkit.client.login.service.LoginService'
     ]
@@ -217,10 +218,10 @@ class TACHttpClient:
     # //EX[0,5,4,3,2,2,0,1, ["org.domain.gwttoolkit.client.exception.ClientBusinessException/000000000", "[Ljava.lang.String;/3242423234", "user@domain.com", "web", "userCache.alreadyLogged" ], 0,7]
     # TODO: valid OK, then set the session, verify if set Cookie in headers
     # //OK[53,...,0,7]
-    print("Ending login ...\n\n")
+    logger.info("Ending login ...\n\n")
 
   def get_xsrf_token(self):
-    print("Getting XSRF token ...")
+    logger.info("Getting XSRF token ...")
     manifest_token = function_tokens[
       'com.google.gwt.user.client.rpc.XsrfTokenService'
     ]
@@ -249,10 +250,10 @@ class TACHttpClient:
     # //OK[2,1,["com.google.gwt.user.client.rpc.XsrfToken/0000000000", "<token: 32 digit HEX>"],0,7]
     _aux = ast.literal_eval(response.text.replace("//OK", ""))
     self.xsrf_token = (_aux[2][0], _aux[2][1])  # [2][0] = "com.google.gwt.user.client.rpc.XsrfToken/0000000000" [2][1] = "token:32"
-    print("Ending XSRF token ...\n\n")
+    logger.info("Ending XSRF token ...\n\n")
 
   def configuration_update_field(self, id_field: str, value: str):
-    print("Updating configuration field ...")
+    logger.info("Updating configuration field ...")
     manifest_token = function_tokens[
       'org.talend.gwtadministrator.client.module.settings.configuration.service.ConfigService'
     ]
@@ -281,10 +282,10 @@ class TACHttpClient:
       verify=False,
       allow_redirects=True
     )
-    print("Ending configuration field ...\n\n")
+    logger.info("Ending configuration field ...\n\n")
 
   def logout(self):
-    print("Start Logout ...")
+    logger.info("Start Logout ...")
     manifest_token = function_tokens[
       'org.talend.gwttoolkit.client.login.service.LoginService'
     ]
@@ -304,7 +305,7 @@ class TACHttpClient:
       verify=False,
       allow_redirects=True
     )
-    print("Ending Logout ...\n\n")
+    logger.info("Ending Logout ...\n\n")
 
 
 
@@ -313,7 +314,7 @@ class TACHttpClientSSO:
     self.sso_url=sso_url
 
   def login(self, username, password):
-    print("Getting login SSO...")
+    logger.info("Getting login SSO...")
     sso_session = requests.Session()
     response = sso_session.post(
       url=self.sso_url,
