@@ -1,6 +1,7 @@
 import ast
 
 from metaservlet.core import TACHttpClient, TACHttpClientSSO
+from utilities.sso_token import get_unique_sso_password
 from settings.credentials import (
   TALEND_URL,
   TALEND_USER,
@@ -27,12 +28,14 @@ TAC_FIELDS = {
   }
 }
 
+sso_password = None
 
 def settings_update_field(field: str, value: str, sso=False):
   """field: str=ssection.field
      value: str
      sso: bool True if the login change to Single Sign On """
 
+  global sso_password
   try:
     section, field_section = field.split(".")
   except IndexError:
@@ -45,10 +48,13 @@ def settings_update_field(field: str, value: str, sso=False):
 
   # 1) login
   if TALEND_SCRAPPER_SSO_FLAG == "1":
+    if get_unique_sso_password is None:
+      sso_password = get_unique_sso_password()
+
     _tmp_client = TACHttpClientSSO(sso_url=TALEND_SCRAPPER_URL)
     tac_client = _tmp_client.login(
       username=TALEND_SCRAPPER_USER,
-      password=TALEND_SCRAPPER_PASSWORD
+      password=sso_password
     )
   else:
     tac_client = TACHttpClient(base_url=TALEND_URL)
