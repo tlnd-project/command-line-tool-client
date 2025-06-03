@@ -36,3 +36,5 @@ if os.environ.get("IS_TALEND_SCRAPPER_PASSWORD_ENCRYPTED")=="1":
   )
 else:
   TALEND_SCRAPPER_PASSWORD = os.environ.get('TALEND_SCRAPPER_PASSWORD')
+
+MANIFEST_PATH = os.environ.get('MANIFEST_PATH')
