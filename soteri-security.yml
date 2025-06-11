@@ -1,0 +1,6 @@
+custom_rules:
+  # comment
+rules:
+  # comment
+allowlist_paths:
+  - .*

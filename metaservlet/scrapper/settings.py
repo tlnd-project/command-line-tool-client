@@ -13,14 +13,14 @@ from settings.credentials import (
 
 TAC_FIELDS = {
   "artifact_repository": {
-    "password": '34', # pragma: allowlist secret - false positive
+    "password": '34',
   },
   "software_update": {
-    "local_deployment_password": '121', # pragma: allowlist secret - false positive
-    "local_reader_password": '123', # pragma: allowlist secret - false positive
+    "local_deployment_password": '121',
+    "local_reader_password": '123',
   },
   "ldap": {
-    "admin_password": '72', # pragma: allowlist secret - false positive
+    "admin_password": '72',
   },
   "smtp": {
     "from_address": '107',
