@@ -73,6 +73,9 @@ TAC_FIELDS = {
   "config_sso_spLoginUrl": 171,
   "config_sso_use_mapping": 172,
   "config_sso_logout_redirect_url": 219,
+  # software update
+  "config_softwareupdate_localRepo_nexus3_password": 121,
+  "config_softwareupdate_localRepo_nexus3_password_reader": 123,
 }
 
 sso_password = None
