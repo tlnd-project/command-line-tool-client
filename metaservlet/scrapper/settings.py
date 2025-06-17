@@ -37,8 +37,8 @@ TAC_FIELDS = {
   "config_ldap_firstName": 75,
   "config_ldap_lastName": 76,
   # job conductor
-  "config_scheduler_archiveAndExecutionLogsPath": None,
-  "config_scheduler_recoveryLogsPath": None,
+  "config_scheduler_archiveAndExecutionLogsPath": 59,
+  "config_scheduler_recoveryLogsPath": 60,
   "config_scheduler_cleaning_maxOldExecutionsLogs": 61,
   "config_scheduler_cleaning_maxDurationBeforeCleaningOldExecutionsLogs": 62,
   "config_scheduler_cleaning_maxOldJobs": 63,
@@ -63,7 +63,7 @@ TAC_FIELDS = {
   "config_smtp_port": 102,
   "config_smtp_requireTLS": 103,
   "config_smtp_requireSSL": 104,
-  "config_smtp_userName": None,
+  "config_smtp_userName": 105,
   "config_smtp_password": 106,
   "config_smtp_fromAddress": 107,
   # sso
