@@ -26,7 +26,7 @@ class MetaservletException(Exception):
 
 
 def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) -> dict:
-  request_to_log = {**params} if params else {}
+  params = params or {}
   request_id = shortuuid.uuid()
   logger.info(f'Command({request_id}): {action_name}')
 
