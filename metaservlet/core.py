@@ -26,6 +26,19 @@ class MetaservletException(Exception):
 
 
 def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) -> dict:
+  """
+  Execute the command using MetaServlet API in terminal
+
+  If the command execute successfully, the struct of response is similar to:
+  {
+    "executionTime": {
+      "millis":   int,
+      "seconds":  int
+    },
+    "result": [list of dictionary],
+    "returnCode": int
+  }
+  """
   request_to_log = {**params} if params else {}
   request_id = shortuuid.uuid()
   logger.info(f'Command({request_id}): {action_name}')
