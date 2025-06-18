@@ -19,7 +19,7 @@ def process_item(server: list):
     )
   if (
     match_flag=='1' and 
-    not local_storage.exist_server_in_cluster(server_name, cluster_name)
+    not local_storage.exist_server_in_cluster(server_id, cluster_name)
   ):
     # TODO: whats is the server_id and cluster_id default values. these variables is set inside the block if.
     metaservlet.add_server_to_virtual_server(server_id, cluster_id)
