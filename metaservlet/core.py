@@ -26,10 +26,21 @@ class MetaservletException(Exception):
 
 
 def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) -> dict:
-  params = params or {}
-  request_id = shortuuid.uuid()
-  logger.info(f'Command({request_id}): {action_name}')
+  """
+  Execute the command using MetaServlet API in terminal
 
+  If the command execute successfully, the struct of response is similar to:
+  {
+    "executionTime": {
+      "millis":   int,
+      "seconds":  int
+    },
+    "result": [list of dictionary],
+    "returnCode": int
+  }
+  """
+  logger.info(f'[METASERVLET]: {action_name}')
+  params = params or {}
   request = {
     'actionName': action_name,
     'authPass': env.TALEND_PASSWORD,
@@ -43,7 +54,7 @@ def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) 
     f' --tac-url={env.TALEND_URL}'
     f' --json-params="{request_json_str}"'
   )
-
+  logger.info(f'[METASERVLET]: command => {command}')
   try:
     result = subprocess.check_output(
       command,
@@ -51,7 +62,7 @@ def call_metaservlet(action_name: str, params: Optional[Dict[str, Any]] = None) 
       executable = '/bin/sh',
       stderr = subprocess.STDOUT
     )
-    logger.info(f'Response({request_id}): {result.splitlines()[0]}')
+    logger.info(f'[METASERVLET]: response <= {result.splitlines()[0]}')
     json_result = json.loads(result.splitlines()[0])
     if 'error' in json_result:
       raise MetaservletException(
