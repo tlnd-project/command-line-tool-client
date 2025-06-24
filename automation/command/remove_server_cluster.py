@@ -37,10 +37,6 @@ def process_item(server: list):
       id_server = server_register["id"]
     except KeyError:
       if match_flag != 'f':
-        # logger.exception(
-        #   f'[REMOVE SERVER CLUSTER] '
-        #   f'you are passing the server name but the server not exist: {server_name}'
-        # )
         raise Exception(f'No such server {server_name} for remove')
 
   if cluster_name:
@@ -48,10 +44,6 @@ def process_item(server: list):
       cluster_register = local_storage.clusters_map[cluster_name]
       id_cluster = cluster_register["id"]
     except KeyError:
-      # logger.exception(
-      #   f'[REMOVE SERVER CLUSTER]'
-      #   f'you passing the virtual server name but it not exist: {server_name}'
-      # )
       raise Exception(f'No such virtual server {cluster_name} for remove')
 
   if (
