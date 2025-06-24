@@ -1,6 +1,6 @@
 import metaservlet.api as metaservlet
 
-from automation.command import local_storage
+from automation.tools.local_server_cluster_managment import local_storage
 from settings.logger_config import logging
 
 
@@ -27,10 +27,9 @@ def process_item(server: list):
     example|virtual_example|f|host_domain
   """
 
-  server_name, virtual_server_name, match_flag = server
+  server_name, cluster_name, match_flag = server
   id_server = None
-  id_virtual_server = None
-  logger.info(f'[REMOVE SERVER CLUSTER] parameters: {server}')
+  id_cluster = None
   # first, evaluate the structure of the parameters
   if server_name:
     try:
@@ -38,41 +37,41 @@ def process_item(server: list):
       id_server = server_register["id"]
     except KeyError:
       if match_flag != 'f':
-        logger.exception(
-          f'[REMOVE SERVER CLUSTER] '
-          f'you passing the server name but the server not exist: {server_name}'
-        )
+        # logger.exception(
+        #   f'[REMOVE SERVER CLUSTER] '
+        #   f'you are passing the server name but the server not exist: {server_name}'
+        # )
         raise Exception(f'No such server {server_name} for remove')
 
-  if virtual_server_name:
+  if cluster_name:
     try:
-      virtual_server_register = local_storage.clusters_map[virtual_server_name]
-      id_virtual_server = virtual_server_register["id"]
+      cluster_register = local_storage.clusters_map[cluster_name]
+      id_cluster = cluster_register["id"]
     except KeyError:
-      logger.exception(
-        f'[REMOVE SERVER CLUSTER]'
-        f'you passing the virtual server name but it not exist: {server_name}'
-      )
-      raise Exception(f'No such virtual server {virtual_server_name} for remove')
+      # logger.exception(
+      #   f'[REMOVE SERVER CLUSTER]'
+      #   f'you passing the virtual server name but it not exist: {server_name}'
+      # )
+      raise Exception(f'No such virtual server {cluster_name} for remove')
 
   if (
     match_flag == 'f'
-    and (id_server is None and id_virtual_server is None)
+    and (id_server is None and id_cluster is None)
   ):
     raise Exception(
-      f'If you use `f` is necessary put the server name or virtual server name'
+      'If you use `f` is necessary put the server name or virtual server name'
     )
 
   if match_flag == 'f':
-    if id_server and id_virtual_server:
+    if id_server and id_cluster:
       logger.info(f'[REMOVE SERVER CLUSTER] force remove all')
-      servers = local_storage.get_servers_from_clusters(virtual_server_name)
+      servers = local_storage.get_servers_from_clusters(cluster_name)
       metaservlet.remove_servers_from_virtual_server(
         [{'serverId': item['serverId']} for item in servers],
-        str(id_virtual_server)
+        str(id_cluster)
       )
-      metaservlet.remove_virtual_server(id_virtual_server)
-      local_storage.remove_cluster(virtual_server_name)
+      metaservlet.remove_virtual_server(id_cluster)
+      local_storage.remove_cluster(cluster_name)
 
       virtual_servers = local_storage.get_virtual_servers()
       for cluster in virtual_servers:
@@ -87,7 +86,7 @@ def process_item(server: list):
       metaservlet.remove_server(id_server)
       local_storage.remove_server(server_name)
 
-    elif id_server and id_virtual_server is None:
+    elif id_server and id_cluster is None:
       logger.info(f'[REMOVE SERVER CLUSTER] force remove the server')
       virtual_servers = local_storage.get_virtual_servers()
       for cluster in virtual_servers:
@@ -101,29 +100,29 @@ def process_item(server: list):
           local_storage.remove_linked_server(cluster["label"], server_name)
       metaservlet.remove_server(id_server)
       local_storage.remove_server(server_name)
-    elif id_server is None and id_virtual_server:
+    elif id_server is None and id_cluster:
       logger.info(f'[REMOVE SERVER CLUSTER] force remove the virtual server')
-      servers = local_storage.get_servers_from_clusters(virtual_server_name),
+      servers = local_storage.get_servers_from_clusters(cluster_name),
       metaservlet.remove_servers_from_virtual_server(
         [{'serverId': item['serverId']} for item in servers],
-        str(id_virtual_server)
+        str(id_cluster)
       )
-      metaservlet.remove_virtual_server(id_virtual_server)
-      local_storage.remove_cluster(virtual_server_name)
+      metaservlet.remove_virtual_server(id_cluster)
+      local_storage.remove_cluster(cluster_name)
   else:
 
-    if id_server and id_virtual_server:
+    if id_server and id_cluster:
       logger.info(f'[REMOVE SERVER CLUSTER] remove the server and the virtual server')
-      if local_storage.exist_server_in_cluster(server_name, virtual_server_name):
+      if local_storage.exist_server_in_cluster(server_name, cluster_name):
         metaservlet.remove_servers_from_virtual_server(
           [
             {'serverId': str(id_server)}
           ],
-          str(id_virtual_server)
+          str(id_cluster)
         )
-        local_storage.remove_linked_server(virtual_server_name, server_name)
+        local_storage.remove_linked_server(cluster_name, server_name)
       else:
-        raise Exception(f'No such virtual server {virtual_server_name} for remove')
+        raise Exception(f'No such virtual server {cluster_name} for remove')
 
     else:
       if id_server:
@@ -134,10 +133,10 @@ def process_item(server: list):
           metaservlet.remove_server(id_server)
           local_storage.remove_server(server_name)
 
-      if id_virtual_server:
+      if id_cluster:
         logger.info(f'[REMOVE SERVER CLUSTER] remove the virtual server')
-        if local_storage.cluster_has_servers(virtual_server_name):
-          raise Exception(f'The virtual server {virtual_server_name} has other servers linked')
+        if local_storage.cluster_has_servers(cluster_name):
+          raise Exception(f'The virtual server {cluster_name} has other servers linked')
         else:
-          metaservlet.remove_virtual_server(id_virtual_server)
-          local_storage.remove_cluster(virtual_server_name)
+          metaservlet.remove_virtual_server(id_cluster)
+          local_storage.remove_cluster(cluster_name)

@@ -111,7 +111,6 @@ def remove_project_server_authorization(project_name: str, cluster_name: str) ->
 
 
 def remove_server(server_id: int) -> dict:
-  """remove an execution server"""
   request_params = {
     'serverId': server_id,
   }
@@ -119,7 +118,6 @@ def remove_server(server_id: int) -> dict:
 
 
 def remove_virtual_server(server_virtual_id: int) -> dict:
-  """remove virtual execution server"""
   request_params = {
     'id': server_virtual_id,
   }

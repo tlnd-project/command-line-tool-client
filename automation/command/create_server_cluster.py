@@ -1,6 +1,6 @@
 import metaservlet.api as metaservlet
 
-from automation.command import local_storage
+from automation.tools.local_server_cluster_managment import local_storage
 
 
 # TODO: change server:list for positional variables.
