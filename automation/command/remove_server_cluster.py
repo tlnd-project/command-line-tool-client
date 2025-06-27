@@ -36,8 +36,7 @@ def process_item(server: list):
       server_register = local_storage.servers_map[server_name]
       id_server = server_register["id"]
     except KeyError:
-      if match_flag != 'f':
-        raise Exception(f'No such server {server_name} for remove')
+      raise Exception(f'No such server {server_name} for remove')
 
   if cluster_name:
     try:
