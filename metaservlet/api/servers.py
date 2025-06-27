@@ -1,11 +1,61 @@
 from metaservlet.core import call_metaservlet
+from settings.logger_config import logging
+
+
+logger = logging.getLogger(__name__)
 
 
 def list_server() -> dict:
+  """
+  Get a list of servers using the MetaServlet API.
+
+  Example of the retrieve data and return.
+    {
+      "result": [
+        {
+          "active": bool,
+          "description": str,
+          "fileTransferPort": int,
+          "host": str,
+          "id": int,
+          "label": str,
+          "monitoringPort": int,
+          "port": int,
+          "processMessagePort": int,
+          "timeOutUnknowState": int,
+          "timeZone": str,
+          "useSSL": bool,
+        }
+      ]
+      ... other keys
+    }
+  """
   return call_metaservlet('listServer')
 
 
 def list_virtual_servers() -> dict:
+  """
+  Get a list of virtual servers using the MetaServlet API.
+
+  Example of the retrieve data and return.
+  {
+    "result": [
+      {
+        "description": "",
+        "id": int,
+        "label": str,
+        "servers": [
+          {
+            "serverId": int,
+            "serverLabel": str,
+          }
+        ],
+        "timezone": str,
+      }
+    ]
+    ... other keys
+  }
+  """
   return call_metaservlet('listVirtualServers')
 
 
@@ -58,3 +108,34 @@ def remove_project_server_authorization(project_name: str, cluster_name: str) ->
     'serverName': cluster_name,
   }
   return call_metaservlet('removeServerProjectAuthorization' , request_params)
+
+
+def remove_server(server_id: int) -> dict:
+  request_params = {
+    'serverId': server_id,
+  }
+  return call_metaservlet('removeServer', request_params)
+
+
+def remove_virtual_server(server_virtual_id: int) -> dict:
+  request_params = {
+    'id': server_virtual_id,
+  }
+  return call_metaservlet('removeVirtualServer', request_params)
+
+
+def remove_servers_from_virtual_server(servers: list, server_virtual_id: str) -> dict:
+  """
+  Remove servers from a virtual server
+
+  for example the value of the servers is:
+    "servers": [
+      {'serverId': '1'},
+      {'serverId': '2'},
+    ]
+  """
+  request_params = {
+    'servers': servers,
+    'virtualServerId': server_virtual_id,
+  }
+  return call_metaservlet('removeServersFromVirtualServer', request_params)

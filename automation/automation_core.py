@@ -18,12 +18,12 @@ def run_command(command: Callable, items: list):
         continue
 
     try:
+      logger.info(f'[RUN COMMAND] {command.__name__} ({item})')
       command(item_content)
-      logger.info(f'Command {command.__name__} executed successfully')
+      logger.info(f'[RUN COMMAND] {command.__name__} executed Successfully\n\n')
     except Exception as e:
       list_errors.append(type(e).__name__)
-      logger.info(f"Values with exception: {item}")
-      logger.exception("an unexpected error occurred")
+      logger.exception(f"[RUN COMMAND] {command.__name__} an unexpected error occurred: {item}")
       continue
 
   if len(list_errors) > 0:
