@@ -21,13 +21,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - New command `update_user`
 
 ### Changed
-- The script run-tac-command.sh return the value integer when finally the executing. The value is zero if executed was successfully
-- If there are one command that not finally success, then general execution exist with flag equal a 1.
-- The variable `params` set empty dict by default in `call_metaservlet` function
-- WORKING_DIRECTORY and CURRENT_HOST_NAME environment variables is not required, now is calculated.
+- The run-tac-command.sh script returns the integer value when execution completes.
+- If the current command did not complete successfully, the overall execution exits with the flag equal to 1.
+- WORKING_DIRECTORY and CURRENT_HOST_NAME environment variables are not required, their values are taken from OS environment.
 
-### Minor Changed codes
-- in command create_authorization the variables rename a code friendly
-- the class LocalServerClusterManagment relocation in tools/local_server_cluster_managment.py
-- in command create_server_cluster apply pep8
-- in command set_license_key apply pep8, rename the variable `license`
+### Minor code changes
+- The `params` variable in the `call_metaservlet` function was set to an empty dictionary by default.
+- Command create_authorization variables were renamed using friendly code approach
+- The class LocalServerClusterManagment relocation in tools/local_server_cluster_managment.py
+- PEP8 format applied in the command `create_server_cluster`
+- The variable `license` was renamed in command `set_license_key` and the PEP8 format was also applied
