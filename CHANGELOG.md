@@ -7,19 +7,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### other changes
-- in command create_authorization the variables rename a code friendly
-- the class LocalServerClusterManagment relocation in tools/local_server_cluster_managment.py
-- in command create_server_cluster apply pep8
-- in command set_license_key apply pep8, rename the variable `license`
-
-### review
-- in delete_users_from_group.py there is not changes.
-- in delete_user_group.py there is not changes.
-- in create_user_group.py there is not changes.
-- review in create_project.py, add conditional if=='git'
-- do I need to add BITBUCKET_REPO_BRANCH or did it already exist?
-
 
 ## [v2.0.0] - 2025-06-30
 
@@ -38,3 +25,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - If there are one command that not finally success, then general execution exist with flag equal a 1.
 - The variable `params` set empty dict by default in `call_metaservlet` function
 - WORKING_DIRECTORY and CURRENT_HOST_NAME environment variables is not required, now is calculated.
+
+### Minor Changed codes
+- in command create_authorization the variables rename a code friendly
+- the class LocalServerClusterManagment relocation in tools/local_server_cluster_managment.py
+- in command create_server_cluster apply pep8
+- in command set_license_key apply pep8, rename the variable `license`
