@@ -7,9 +7,9 @@ from settings.credentials import (
   TALEND_URL,
   TALEND_USER,
   TALEND_PASSWORD,
-  TALEND_SCRAPPER_URL,
+  TALEND_SCRAPPER_SSO_URL,
   TALEND_SCRAPPER_SSO_FLAG,
-  TALEND_SCRAPPER_USER,
+  TALEND_SCRAPPER_SSO_USER,
 )
 
 
@@ -97,9 +97,9 @@ def settings_update_field(field: str, value: str, sso=False):
     if sso_password is None:
       sso_password = get_unique_sso_password()
 
-    _tmp_client = TACHttpClientSSO(sso_url=TALEND_SCRAPPER_URL)
+    _tmp_client = TACHttpClientSSO(sso_url=TALEND_SCRAPPER_SSO_URL)
     tac_client = _tmp_client.login(
-      username=TALEND_SCRAPPER_USER,
+      username=TALEND_SCRAPPER_SSO_USER,
       password=sso_password
     )
   else:
