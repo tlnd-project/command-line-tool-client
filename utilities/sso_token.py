@@ -2,10 +2,10 @@ import subprocess
 
 from settings.logger_config import logging
 from settings.credentials import (
-    TALEND_SCRAPPER_USER,
-    TALEND_SCRAPPER_DOMAIN,
-    TALEND_SCRAPPER_PATH_COMMAND,
-    TALEND_SCRAPPER_CONF_INI
+    TALEND_SCRAPPER_SSO_USER,
+    TALEND_SCRAPPER_SSO_DOMAIN,
+    TALEND_SCRAPPER_SSO_PATH_COMMAND,
+    TALEND_SCRAPPER_SSO_CONF_INI
 )
 
 
@@ -15,13 +15,13 @@ logger = logging.getLogger(__name__)
 def get_unique_sso_password() -> str:
     """this function is used only for request to SSO login and generate a unique
     sso password. this password is one time. Its necessary used the command defined
-    in TALEND_SCRAPPER_PATH_COMMAND environment variable for create the password.
+    in TALEND_SCRAPPER_SSO_PATH_COMMAND environment variable for create the password.
     """
     command = (
-        f'{TALEND_SCRAPPER_PATH_COMMAND} '
-        f'-conf {TALEND_SCRAPPER_CONF_INI} '
-        f'-res {TALEND_SCRAPPER_DOMAIN} '
-        f'-acct "{TALEND_SCRAPPER_DOMAIN}\{TALEND_SCRAPPER_USER}" '
+        f'{TALEND_SCRAPPER_SSO_PATH_COMMAND} '
+        f'-conf {TALEND_SCRAPPER_SSO_CONF_INI} '
+        f'-res {TALEND_SCRAPPER_SSO_DOMAIN} '
+        f'-acct "{TALEND_SCRAPPER_SSO_DOMAIN}\{TALEND_SCRAPPER_SSO_USER}" '
         f'-expirecache'
     )
 
