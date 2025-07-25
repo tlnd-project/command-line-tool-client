@@ -21,7 +21,11 @@ if os.environ.get("IS_PASSWORD_ENCRYPTED")=="1":
 else:
   TALEND_PASSWORD = os.environ.get('TALEND_PASSWORD')
 METASERVLET_CALLER = os.environ.get('METASERVLET_CALLER')
-BITBUCKET_AUTH_TOKEN = os.environ.get('BITBUCKET_AUTH_TOKEN')
+BITBUCKET_AUTH_TOKEN = decrypt(
+    os.environ.get('BITBUCKET_AUTH_TOKEN'),
+    f'{WORKING_DIRECTORY}/settings/dtcc_bbk.key',
+    JAR_DECRYPTION_PATH,
+)
 BITBUCKET_REPO_BRANCH = os.environ.get('BITBUCKET_REPO_BRANCH')
 BITBUCKET_REPO_URL = os.environ.get('BITBUCKET_REPO_URL')
 ENVIRONMENT_FLAG = os.environ.get('ENVIRONMENT_FLAG')
