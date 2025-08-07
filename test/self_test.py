@@ -1,3 +1,8 @@
+import os
+import sys
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from settings.logger_config import logging
 from test_bitbucket import test_download_file
 from test_scrapper import test_login_logout

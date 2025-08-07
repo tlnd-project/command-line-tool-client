@@ -1,5 +1,5 @@
 from metaservlet.core import call_metaservlet
-import settings.credentials as env
+from settings import credentials as env
 from settings.logger_config import logging
 
 

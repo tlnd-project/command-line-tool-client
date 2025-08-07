@@ -5,7 +5,7 @@ import tarfile
 import csv
 import requests
 from settings.logger_config import logging
-from settings.credentials import WORKING_DIRECTORY, BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, BITBUCKET_REPO_BRANCH
+from settings.credentials import WORKING_DIRECTORY, BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, BITBUCKET_REPO_BRANCH, ENVIRONMENT_FLAG
 
 logger = logging.getLogger(__name__)
 
@@ -18,7 +18,7 @@ def create_directory(path, force_create=False):
       shutil.rmtree(path)
       os.mkdir(path)
 
-def download_project_tar_gz(file_name) -> str:
+def download_project_tar_gz(file_name):
   headers = {
     'Authorization': f'Bearer {BITBUCKET_AUTH_TOKEN}'
   }
@@ -44,22 +44,21 @@ def find_txt_files(directory):
   return _files
 
 def validate_csv(files_txt, required_columns=None):
-  try:
-    for file_name in files_txt:
-      logger.info(f"Validating the file {file_name} .... ")
-      with open(file_name, 'r', encoding='utf-8') as csvfile:
-        reader = csv.reader(csvfile, delimiter='|')
-        rows = list(reader)
+  for file_name in files_txt:
+    logger.info(f"Validating the file {file_name} .... ")
+    with open(file_name, 'r', encoding='utf-8') as csvfile:
+      reader = csv.reader(csvfile, delimiter='|')
+      rows = list(reader)
 
-        if not rows:
-          logger.error(f"File {file_name} has no rows")
-          continue
-        header = rows[0]
-        expected_columns = len(header)
+      if not rows:
+        logger.error(f"File {file_name} has no rows")
+        continue
+      header = rows[0]
+      expected_columns = len(header)
 
-        for i, row in enumerate(rows[1:], start=2):
-          if len(row) != expected_columns:
-            logger.error(f"Error: unexpected columns in the line {i}  = {len(row)} != {expected_columns}")
+      for i, row in enumerate(rows[1:], start=2):
+        if len(row) != expected_columns:
+          logger.error(f"Error: unexpected columns in the line {i}  = {len(row)} != {expected_columns}")
 
 def validate_all_txt_from_project():
   # create a temp directory
@@ -75,7 +74,7 @@ def validate_all_txt_from_project():
     tar.extractall(path=temp_directory)
 
   # find all files with .txt extension
-  project_directory = os.path.join(temp_directory, f"{BITBUCKET_REPO_BRANCH}")
+  project_directory = os.path.join(temp_directory, f"DeploymentFiles/{ENVIRONMENT_FLAG}")
   files_txt = find_txt_files(project_directory)
 
   # verify the format CSV.

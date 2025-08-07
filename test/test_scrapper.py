@@ -1,4 +1,3 @@
-from metaservlet.scrapper.settings import TAC_FIELDS
 from utilities.sso_token import get_unique_sso_password
 from metaservlet.core import TACHttpClient, TACHttpClientSSO
 from settings.credentials import (
