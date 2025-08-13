@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+- The Bitbucket token is encrypted and requires the key located in the `settings/` directory for decryption.
+- The User password is encrypted and requires the key located in the `settings/` directory for decryption.
+
 
 ## [v2.0.0] - 2025-06-30
 
