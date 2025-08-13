@@ -6,7 +6,7 @@
 #              data file name in Talend8 repository
 # Author: Ricardo Bermudez Bermudez
 # Usage:./run-tac-command -c $command_name -f $remote_file_name_and_extension
-# Version: 0.1
+# Version: 2.0
 #-------------------------------------------------------------------------------
 
 timestamp=`date +"%Y-%m-%dT%H.%M.%S.%2N"`
