@@ -1,10 +1,6 @@
 from metaservlet.api import project_exists, create_project
-from utilities.bitbucket_files_management import download_file
 from utilities.encryption import decrypt
-from settings.credentials import JAR_DECRYPTION_PATH
-
-
-KEY_NAME = 'dtcc.key'
+from settings.constant import path_file_dtcc_jar, path_file_key
 
 
 def process_item(project: list):
@@ -14,8 +10,7 @@ def process_item(project: list):
     raise Exception(f'{project_name} already exist')
   
   if storage=='git':
-    key_path = download_file(KEY_NAME)
-    git_pass = decrypt(git_pass, key_path, JAR_DECRYPTION_PATH)
+    git_pass = decrypt(git_pass, path_file_key, path_file_dtcc_jar)
   
   create_project(
     project_name, storage, git_location, git_login, git_pass
