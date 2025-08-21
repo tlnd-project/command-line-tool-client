@@ -6,6 +6,7 @@ from automation.automation_core import run_command
 from utilities.encryption import decrypt
 from utilities.bitbucket_files_management import BitbucketFileManager
 from settings.constant import (
+  CURRENT_HOST_NAME,
   ENV_NAME,
   ENV_KEYS_NAME,
   PATH_CACHE_DIRECTORY,
@@ -33,22 +34,22 @@ def init_setup():
   )
 
   # 1) download .env file from bitbucket
-  directory = os.environ.get('REPOSITORY_KEYS_DIRECTORY')
+
   try:
     client_bitbucket.download_file(
-      file_name=f"{directory}/{ENV_NAME}",
+      file_name=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{ENV_NAME}",
       path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      file_name=f"{directory}/{NAME_DTCC_KEY}",
+      file_name=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{NAME_DTCC_KEY_MASTER}",
       path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      file_name=f"{directory}/{NAME_DTCC_KEY_MASTER}",
+      file_name=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY}",
       path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      file_name=f"{directory}/{NAME_DTCC_KEY_BITBUCKET}",
+      file_name=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY_BITBUCKET}",
       path_file=PATH_CACHE_DIRECTORY
     )
   except Exception as e:
