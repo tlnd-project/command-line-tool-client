@@ -2,7 +2,6 @@ import os
 import sys
 from dotenv import load_dotenv, find_dotenv
 
-from automation.automation_core import run_command
 from utilities.encryption import decrypt
 from utilities.bitbucket_files_management import BitbucketFileManager
 from settings.constant import (
@@ -37,20 +36,24 @@ def init_setup():
 
   try:
     client_bitbucket.download_file(
-      file_name=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{ENV_NAME}",
-      path_file=PATH_CACHE_DIRECTORY
+      name_file=ENV_NAME,
+      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{ENV_NAME}",
+      output_path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      file_name=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{NAME_DTCC_KEY_MASTER}",
-      path_file=PATH_CACHE_DIRECTORY
+      name_file=NAME_DTCC_KEY_MASTER,
+      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{NAME_DTCC_KEY_MASTER}",
+      output_path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      file_name=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY}",
-      path_file=PATH_CACHE_DIRECTORY
+      name_file=NAME_DTCC_KEY,
+      full_name_file=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY}",
+      output_path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      file_name=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY_BITBUCKET}",
-      path_file=PATH_CACHE_DIRECTORY
+      name_file=NAME_DTCC_KEY_BITBUCKET,
+      full_name_file=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY_BITBUCKET}",
+      output_path_file=PATH_CACHE_DIRECTORY
     )
   except Exception as e:
     # 2) check if exists the file .env inside the `path_cache_directory`
@@ -66,6 +69,7 @@ def init_setup():
       )
 
 def main():
+  from automation.automation_core import run_command
   from settings.credentials import (
     BITBUCKET_DATA_SOURCE_URL,
     BITBUCKET_DATA_SOURCE_BRANCH,

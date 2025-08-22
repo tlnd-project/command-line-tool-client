@@ -3,11 +3,6 @@ import requests
 import urllib3, os
 from io import StringIO
 
-from settings.logger_config import logging
-
-
-logger = logging.getLogger(__name__)
-
 
 class BitbucketFileManager:
 
@@ -28,17 +23,18 @@ class BitbucketFileManager:
     response = requests.get(
       self._build_file_url(file_name),
       headers=self._get_headers(),
-      allow_redirects=False
+      allow_redirects=False,
+      verify=False
     )
     response.raise_for_status()
     return response.text
 
-  def download_file(self, file_name: str, path_file: str, force: bool = True) -> str:
-    local_file = os.path.join(path_file, file_name)
+  def download_file(self, name_file: str, full_name_file: str, output_path_file: str, force: bool = True) -> str:
+    local_file = os.path.join(output_path_file, name_file)
     if force and os.path.exists(local_file):
       os.remove(local_file)
     if not os.path.exists(local_file):
-      content = self.download_body_content(file_name)
+      content = self.download_body_content(full_name_file)
       with open(local_file, "w") as f:
         f.write(content)
     return local_file
