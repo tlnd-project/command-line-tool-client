@@ -1,20 +1,16 @@
 import os
 import sys
-from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 
 from utilities.encryption import decrypt
 from utilities.bitbucket_files_management import BitbucketFileManager
 from settings.constant import (
   CURRENT_HOST_NAME,
-  ENV_NAME,
-  ENV_KEYS_NAME,
+  PATH_FILE_ENV,
+  PATH_FILE_KEYS_ENV,
   PATH_CACHE_DIRECTORY,
   PATH_FILE_KEY_BITBUCKET,
   PATH_FILE_DTCC_JAR,
-  NAME_DTCC_KEY,
-  NAME_DTCC_KEY_MASTER,
-  NAME_DTCC_KEY_BITBUCKET,
   ENVIRONMENT_FLAG
 )
 
@@ -23,9 +19,7 @@ def init_setup():
 
   def load_env_file(file_path):
     env_vars = {}
-    if not file_path.exists():
-      return env_vars
-    with file_path.open("r", encoding="utf-8") as f:
+    with open(file_path, "r", encoding="utf-8") as f:
       for line in f:
         line = line.strip()
         if not line or line.startswith("#"):
@@ -35,16 +29,7 @@ def init_setup():
           env_vars[key.strip()] = val.strip()
     return env_vars
 
-  def merge_env():
-    env_vars = load_env_file(Path(f"{PATH_CACHE_DIRECTORY}/__all__"))
-    env_vars.update(load_env_file(Path(f"{PATH_CACHE_DIRECTORY}/.{CURRENT_HOST_NAME}")))
-
-    # Escribir el resultado con formato export
-    with open(f"{PATH_CACHE_DIRECTORY}/.env" ,"w", encoding="utf-8") as f:
-      for key, val in env_vars.items():
-        f.write(f"export {key}={val}\n")
-
-  load_dotenv(dotenv_path=ENV_KEYS_NAME)
+  load_dotenv(dotenv_path=PATH_FILE_KEYS_ENV)
   token = decrypt(
     os.environ.get('REPOSITORY_KEYS_TOKEN'),
     PATH_FILE_KEY_BITBUCKET,
@@ -60,34 +45,51 @@ def init_setup():
 
   try:
     client_bitbucket.download_file(
-      name_file=ENV_NAME,
-      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/__all__",
+      name_file="__all__",
+      full_name_file=f"{ENVIRONMENT_FLAG}/__all__",
       output_path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
-      name_file=ENV_NAME,
-      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/.{CURRENT_HOST_NAME}",
+      name_file=f".{CURRENT_HOST_NAME}",
+      full_name_file=f"{ENVIRONMENT_FLAG}/.{CURRENT_HOST_NAME}",
       output_path_file=PATH_CACHE_DIRECTORY
     )
-    client_bitbucket.download_file(
-      name_file=NAME_DTCC_KEY_MASTER,
-      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{NAME_DTCC_KEY_MASTER}",
-      output_path_file=PATH_CACHE_DIRECTORY
-    )
-    client_bitbucket.download_file(
-      name_file=NAME_DTCC_KEY,
-      full_name_file=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY}",
-      output_path_file=PATH_CACHE_DIRECTORY
-    )
-    merge_env()
+    path_file_env_all = f"{PATH_CACHE_DIRECTORY}/__all__"
+    path_file_env_current_host_name = f"{PATH_CACHE_DIRECTORY}/.{CURRENT_HOST_NAME}"
+
+    # TODO: add validation if the file exist
+    env_vars = load_env_file(path_file_env_all)
+    env_vars.update(load_env_file(path_file_env_current_host_name))
+
+    for key, value in env_vars.items():
+      tmp_token = env_vars[key].strip()
+      if tmp_token[:1] == "#":
+        name_key = tmp_token[1:]
+        client_bitbucket.download_file(
+          name_file=f"{name_key}.key",
+          full_name_file=f"{ENVIRONMENT_FLAG}/keys/{name_key}",
+          output_path_file=PATH_CACHE_DIRECTORY
+        )
+        token_encrypt = open(f'{PATH_CACHE_DIRECTORY}/{name_key}').read().strip()
+        path_file_key = f"{PATH_CACHE_DIRECTORY}/{name_key}.key"
+        open(path_file_key, "w").write(name_key)
+        _token = decrypt(
+          token_encrypt,
+          PATH_FILE_KEY_BITBUCKET,
+          PATH_FILE_DTCC_JAR,
+        )
+        env_vars[key] = _token
+        os.remove(path_file_key)
+
+    os.remove(path_file_key)
+    # create the .env file
+    with open(f"{PATH_CACHE_DIRECTORY}/.env", "w", encoding="utf-8") as f:
+      for key, val in env_vars.items():
+        f.write(f"export {key}={val}\n")
+
   except Exception as e:
     # 2) check if exists the file .env inside the `path_cache_directory`
-    if (
-        not os.path.exists(os.path.join(PATH_CACHE_DIRECTORY, ENV_NAME))
-        or not os.path.isdir(os.path.join(PATH_CACHE_DIRECTORY, NAME_DTCC_KEY))
-        or not os.path.isdir(os.path.join(PATH_CACHE_DIRECTORY, NAME_DTCC_KEY_MASTER))
-        or not os.path.isdir(os.path.join(PATH_CACHE_DIRECTORY, NAME_DTCC_KEY_BITBUCKET))
-    ):
+    if not os.path.exists(PATH_FILE_ENV):
       raise Exception(
         """Environment files does not exist and  
         could not be downloaded from Bitbucket."""

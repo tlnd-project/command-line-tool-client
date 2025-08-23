@@ -1,13 +1,8 @@
 import os
 from dotenv import load_dotenv, find_dotenv
 
-from utilities.encryption import decrypt
 from settings.constant import (
-  ENV_NAME,
-  PATH_CACHE_DIRECTORY,
-  PATH_FILE_DTCC_JAR,
-  PATH_FILE_KEY_MASTER,
-  PATH_FILE_KEY_BITBUCKET,
+  PATH_FILE_ENV,
 )
 
 __all__ = [
@@ -29,26 +24,15 @@ __all__ = [
   "LOG_NAME",
 ]
 
-load_dotenv(dotenv_path=os.path.join(PATH_CACHE_DIRECTORY, ENV_NAME))
+load_dotenv(dotenv_path=PATH_FILE_ENV)
 
 TALEND_URL = os.environ.get('TALEND_URL')
 TALEND_USER = os.environ.get('TALEND_USER')
-if os.environ.get("IS_PASSWORD_ENCRYPTED")=="1":
-  TALEND_PASSWORD = decrypt(
-    os.environ.get('TALEND_PASSWORD'),
-    PATH_FILE_KEY_MASTER,
-    PATH_FILE_DTCC_JAR,
-  )
-else:
-  TALEND_PASSWORD = os.environ.get('TALEND_PASSWORD')
+TALEND_PASSWORD = os.environ.get('TALEND_PASSWORD')
 
 METASERVLET_CALLER = os.environ.get('METASERVLET_CALLER')
 
-BITBUCKET_DATA_SOURCE_TOKEN = decrypt(
-    os.environ.get('BITBUCKET_DATA_SOURCE_TOKEN'),
-    PATH_FILE_KEY_BITBUCKET,
-    PATH_FILE_DTCC_JAR,
-)
+BITBUCKET_DATA_SOURCE_TOKEN = os.environ.get('BITBUCKET_DATA_SOURCE_TOKEN')
 BITBUCKET_DATA_SOURCE_BRANCH = os.environ.get('BITBUCKET_DATA_SOURCE_BRANCH')
 BITBUCKET_DATA_SOURCE_URL = os.environ.get('BITBUCKET_DATA_SOURCE_URL')
 
