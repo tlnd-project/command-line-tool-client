@@ -1,5 +1,6 @@
 import os
 import sys
+from pathlib import Path
 from dotenv import load_dotenv, find_dotenv
 
 from utilities.encryption import decrypt
@@ -20,6 +21,29 @@ from settings.constant import (
 
 def init_setup():
 
+  def load_env_file(file_path):
+    env_vars = {}
+    if not file_path.exists():
+      return env_vars
+    with file_path.open("r", encoding="utf-8") as f:
+      for line in f:
+        line = line.strip()
+        if not line or line.startswith("#"):
+          continue
+        if "=" in line:
+          key, val = line.split("=", 1)
+          env_vars[key.strip()] = val.strip()
+    return env_vars
+
+  def merge_env():
+    env_vars = load_env_file(Path(f"{PATH_CACHE_DIRECTORY}/__all__"))
+    env_vars.update(load_env_file(Path(f"{PATH_CACHE_DIRECTORY}/.{CURRENT_HOST_NAME}")))
+
+    # Escribir el resultado con formato export
+    with open(f"{PATH_CACHE_DIRECTORY}/.env" ,"w", encoding="utf-8") as f:
+      for key, val in env_vars.items():
+        f.write(f"export {key}={val}\n")
+
   load_dotenv(dotenv_path=ENV_KEYS_NAME)
   token = decrypt(
     os.environ.get('REPOSITORY_KEYS_TOKEN'),
@@ -37,7 +61,12 @@ def init_setup():
   try:
     client_bitbucket.download_file(
       name_file=ENV_NAME,
-      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/{ENV_NAME}",
+      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/__all__",
+      output_path_file=PATH_CACHE_DIRECTORY
+    )
+    client_bitbucket.download_file(
+      name_file=ENV_NAME,
+      full_name_file=f"{ENVIRONMENT_FLAG}/{CURRENT_HOST_NAME}/.{CURRENT_HOST_NAME}",
       output_path_file=PATH_CACHE_DIRECTORY
     )
     client_bitbucket.download_file(
@@ -50,11 +79,7 @@ def init_setup():
       full_name_file=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY}",
       output_path_file=PATH_CACHE_DIRECTORY
     )
-    client_bitbucket.download_file(
-      name_file=NAME_DTCC_KEY_BITBUCKET,
-      full_name_file=f"{ENVIRONMENT_FLAG}/{NAME_DTCC_KEY_BITBUCKET}",
-      output_path_file=PATH_CACHE_DIRECTORY
-    )
+    merge_env()
   except Exception as e:
     # 2) check if exists the file .env inside the `path_cache_directory`
     if (
