@@ -26,7 +26,7 @@ def init_setup():
           continue
         if "=" in line:
           key, val = line.split("=", 1)
-          env_vars[key.strip()] = val.strip()
+          env_vars[key.strip()] = val.replace('"', "").strip()
     return env_vars
 
   load_dotenv(dotenv_path=PATH_FILE_KEYS_ENV)
@@ -66,20 +66,26 @@ def init_setup():
       if tmp_token[:1] == "#":
         name_key = tmp_token[1:]
         client_bitbucket.download_file(
-          name_file=f"{name_key}.key",
+          name_file=f"{name_key}.token",
           full_name_file=f"{ENVIRONMENT_FLAG}/keys/{name_key}",
           output_path_file=PATH_CACHE_DIRECTORY
         )
-        token_encrypt = open(f'{PATH_CACHE_DIRECTORY}/{name_key}').read().strip()
+        path_file_token = f"{PATH_CACHE_DIRECTORY}/{name_key}.token"
         path_file_key = f"{PATH_CACHE_DIRECTORY}/{name_key}.key"
+        token_encrypt = open(path_file_token).read().strip()
+
         open(path_file_key, "w").write(name_key)
         _token = decrypt(
           token_encrypt,
-          PATH_FILE_KEY_BITBUCKET,
+          path_file_key,
           PATH_FILE_DTCC_JAR,
         )
         env_vars[key] = _token
+        os.remove(path_file_token)
         os.remove(path_file_key)
+    # remove __all__ and .hostname
+    os.remove(path_file_env_all)
+    os.remove(path_file_env_current_host_name)
 
     # create the .env file
     with open(f"{PATH_CACHE_DIRECTORY}/.env", "w", encoding="utf-8") as f:
