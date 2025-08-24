@@ -81,7 +81,6 @@ def init_setup():
         env_vars[key] = _token
         os.remove(path_file_key)
 
-    os.remove(path_file_key)
     # create the .env file
     with open(f"{PATH_CACHE_DIRECTORY}/.env", "w", encoding="utf-8") as f:
       for key, val in env_vars.items():
