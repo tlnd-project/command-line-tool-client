@@ -5,7 +5,13 @@ import tarfile
 import csv
 import requests
 from settings.logger_config import logging
-from settings.credentials import WORKING_DIRECTORY, BITBUCKET_AUTH_TOKEN, BITBUCKET_REPO_URL, BITBUCKET_REPO_BRANCH, ENVIRONMENT_FLAG
+from settings.credentials import (
+  WORKING_DIRECTORY,
+  BITBUCKET_DATA_SOURCE_TOKEN,
+  BITBUCKET_DATA_SOURCE_URL,
+  BITBUCKET_DATA_SOURCE_BRANCH,
+  ENVIRONMENT_FLAG
+)
 
 logger = logging.getLogger(__name__)
 
@@ -20,11 +26,11 @@ def create_directory(path, force_create=False):
 
 def download_project_tar_gz(file_name):
   headers = {
-    'Authorization': f'Bearer {BITBUCKET_AUTH_TOKEN}'
+    'Authorization': f'Bearer {BITBUCKET_DATA_SOURCE_TOKEN}'
   }
-  new_url = BITBUCKET_REPO_URL.split("raw")[0]
+  new_url = BITBUCKET_DATA_SOURCE_URL.split("raw")[0]
   response = requests.get(
-    f"{new_url}archive?at=refs%2Fheads%2Frelease%2F{BITBUCKET_REPO_BRANCH}&format=tar.gz",
+    f"{new_url}archive?at=refs%2Fheads%2Frelease%2F{BITBUCKET_DATA_SOURCE_BRANCH}&format=tar.gz",
     verify=False,
     stream=True,
     headers=headers
@@ -66,7 +72,7 @@ def validate_all_txt_from_project():
   create_directory(temp_directory)
 
   # download the repository .tar.gz
-  file_name = os.path.join(temp_directory, f"{BITBUCKET_REPO_BRANCH}.tar.gz")
+  file_name = os.path.join(temp_directory, f"{BITBUCKET_DATA_SOURCE_BRANCH}.tar.gz")
   download_project_tar_gz(file_name)
 
   # unzip the repository

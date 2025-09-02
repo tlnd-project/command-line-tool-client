@@ -1,8 +1,10 @@
 venv
 .env
 __pycache__
-dtcc.jar
-dtcc.key
 logs
 .DS_Store
 desktop.ini
+logs/
+!logs/dir_logs
+.cache
+!.cache/dir_cache

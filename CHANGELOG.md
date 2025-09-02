@@ -7,10 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Changed
-- The Bitbucket token is encrypted and requires the key located in the `settings/` directory for decryption.
-- The User password is encrypted and requires the key located in the `settings/` directory for decryption.
+## [v3.0.0]
 
+### Added
+- It is necessary to have three repositories. Code, Keys anda Source Data. The script `refactor_deployment.sh` is responsibility doing the deployment project.
+The script use the `Code` repository and set the minimal variables environment for the first execute, the file called is `.env_keys`. 
+- The repository `Keys` use the two files, the `__all__` and the `.<hostname>`. The first file has the general variables for all servers and the second has
+variables specific to that server. When execute the command `run-tac-command.sh <command> <source data>` the program always downloads the file `__all__` and `.<hostname>`
+and merges them to building the file `.cache/.env`. The variables in `.<hostname>` has major priority and override the variable in `__all__`. If the value of whatever variable beginning with the character `#`
+then it is decrypted. The format the password encrypted is `#<key_value>` therefore exists a file called `keys/<key_value>` that contained the encrypted value.
+The program takes the `key_value` without the character `#` and the container of file called `keys/.<key_value>` to do the decryption.
+In case it can not download the files `__all__` and  `.<hostname>` then it use the last `.cache/.env`.
+It is important to mention that the password in the file `.cache/.env` is not encrypted.
+- The `Source Data` repository is only for the files `<data>.txt`. If is not possible download the file or not exists then, the command fail
+- Add self-test, execute validation.sh script.
 
 ## [v2.0.0] - 2025-06-30
 

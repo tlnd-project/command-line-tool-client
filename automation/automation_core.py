@@ -1,6 +1,6 @@
 import sys
 from collections.abc import Callable
-from settings.credentials import CURRENT_HOST_NAME
+from settings.constant import CURRENT_HOST_NAME
 from settings.logger_config import logging
 
 
